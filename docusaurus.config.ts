@@ -1,6 +1,9 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import remarkGithubAlerts from 'remark-github-alerts';
+import rehypeImgWidth from './src/plugins/rehype-img-width'
+
 
 // 站点配置
 const config: Config = {
@@ -28,21 +31,35 @@ const config: Config = {
   // 使用 presets 配置
   presets: [
     [
-      'classic',
+      '@docusaurus/preset-classic',
       {
         docs: {
           sidebarPath: './sidebars.ts', // 引入自定义的侧边栏配置文件
+          remarkPlugins: [
+            remarkGithubAlerts,
+            rehypeImgWidth,
+          ],
           editUrl:
             'https://github.com/HengXin666/HXLoLiHub/edit/main/docs/', // 文档编辑链接，指向 GitHub 项目
         },
         blog: {
           showReadingTime: true, // 显示博客阅读时间
+          remarkPlugins: [
+            remarkGithubAlerts,
+            rehypeImgWidth,
+          ],
           feedOptions: {
             type: ['rss', 'atom'], // 支持的博客订阅格式
             xslt: true,
           },
           editUrl:
             'https://github.com/HengXin666/HXLoLiHub/edit/main/blog/', // 博客编辑链接，指向 GitHub 项目
+        },
+        pages: {
+          remarkPlugins: [
+            remarkGithubAlerts,
+            rehypeImgWidth
+          ],
         },
         theme: {
           customCss: './src/css/custom.css', // 可以放置自定义的 CSS 样式

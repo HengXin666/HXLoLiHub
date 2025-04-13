@@ -21,9 +21,13 @@
     "@types/node": "^22.14.1",
     "clsx": "^2.0.0",
     "fs-extra": "^11.3.0",
+    "github-markdown-css": "^5.8.1",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "remark": "^15.0.1",
+    "remark-github-alerts": "^0.1.1",
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.7.0",

@@ -1,30 +1,94 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
- */
+/* 导入Github Tip样式 */
+@import "remark-github-alerts/styles/github-base.css";
+@import "remark-github-alerts/styles/github-colors-light.css";
 
-/* You can override the default Infima variables here. */
+/* ===== Markdown 样式 ===== */
+
+/* 包裹 Markdown 内容的区域 */
+.theme-doc-markdown .markdown {
+  box-sizing: border-box;
+  padding: 32px;
+  max-width: 960px;
+  margin: 0 auto;
+  background-color: var(--markdown-light-bg);
+  color: var(--markdown-light-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* 深色模式下的背景和文本颜色 */
+html[data-theme='dark'] .theme-doc-markdown .markdown {
+  background-color: var(--markdown-dark-bg);
+  color: var(--markdown-dark-text);
+}
+
+/* 全局颜色变量 */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --markdown-light-bg: #fdfaf6;
+  --markdown-light-text: #2e2e2e;
+  --markdown-dark-bg: #0d1117;
+  --markdown-dark-text: #c9d1d9;
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+/* 标题、段落等的继承颜色 */
+.theme-doc-markdown .markdown h1,
+.theme-doc-markdown .markdown h2,
+.theme-doc-markdown .markdown h3,
+.theme-doc-markdown .markdown h4,
+.theme-doc-markdown .markdown h5,
+.theme-doc-markdown .markdown h6,
+.theme-doc-markdown .markdown p,
+.theme-doc-markdown .markdown ul,
+.theme-doc-markdown .markdown ol,
+.theme-doc-markdown .markdown blockquote,
+.theme-doc-markdown .markdown table {
+  color: inherit;
 }
+
+/* ===== 图片样式：支持自定义宽度和居中 ===== */
+
+/* 限定在文档内容区域 */
+.theme-doc-markdown img {
+  display: block;
+  margin: 1rem auto;
+  height: auto;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+/* 鼠标悬停时稍微放大 */
+.theme-doc-markdown img:hover {
+  transform: scale(1.02);
+}
+
+/* 表格居中 */
+.theme-doc-markdown table {
+  margin: 1rem auto;
+  border-collapse: collapse;
+}
+
+/* ===== 表格居中 ===== */
+
+.theme-doc-markdown .markdown table {
+  margin: 1.5em auto;
+  border-collapse: collapse;
+  width: 90%; /* 自动调整宽度 */
+}
+
+/* 表格单元格的样式 */
+.theme-doc-markdown .markdown table th,
+.theme-doc-markdown .markdown table td {
+  border: 1px solid #d0d7de;
+  padding: 6px 13px;
+}
+
+/* 深色模式下表格的边框颜色 */
+html[data-theme='dark'] .theme-doc-markdown .markdown table th,
+html[data-theme='dark'] .theme-doc-markdown .markdown table td {
+  border: 1px solid #30363d;
+}
+
+/* ===== 修复 Docusaurus 额外的 Padding ===== */
+.theme-doc-markdown {
+  padding: 0 !important;
+}
+

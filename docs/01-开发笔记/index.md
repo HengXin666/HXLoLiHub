@@ -6,3 +6,5 @@ int main() {
 }
 ```
 
+> [!TIP]
+> 这个是TIP
