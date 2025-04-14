@@ -49,3 +49,10 @@ $ GIT_USER=<您的 GitHub 用户名>yarn deploy
 - [数学渲染 KaTeX](https://docusaurus.nodejs.cn/docs/markdown-features/math-equations)
 
 - [图片单击放大](https://github.com/flexanalytics/plugin-image-zoom)
+
+- [文档关系图](https://github.com/Arsero/docusaurus-graph)
+
+```npm
+npm install monaco-editor react-monaco-editor
+```
+

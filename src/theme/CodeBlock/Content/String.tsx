@@ -35,6 +35,10 @@ export default function CodeBlockString({
   const {
     prism: {defaultLanguage, magicComments},
   } = useThemeConfig();
+
+  // 获取语言
+  const fkPrefixLanguage = blockClassName.length ? blockClassName.split("-")[1] : '';
+
   const language = normalizeLanguage(
     languageProp ?? parseLanguage(blockClassName) ?? defaultLanguage,
   );
@@ -97,7 +101,7 @@ export default function CodeBlockString({
           )}
         </Highlight>
         <div className={styles.buttonGroup}>
-            {language && <span className={styles.languageName}>{language}</span>}
+            {fkPrefixLanguage && <span className={styles.languageName}>{fkPrefixLanguage}</span>}
             {(wordWrap.isEnabled || wordWrap.isCodeScrollable) && (
                 <WordWrapButton
                     className={styles.codeButton}

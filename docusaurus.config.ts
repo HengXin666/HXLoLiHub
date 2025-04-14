@@ -30,6 +30,10 @@ const config: Config = {
 
   plugins: [
     'plugin-image-zoom', // 图片单击放大
+    'docusaurus-graph',  // 文档关系图
+  ],
+  themes: [
+    '@docusaurus/theme-live-codeblock', // 创建交互式编码编辑器
   ],
 
   // 使用 presets 配置
@@ -96,7 +100,13 @@ const config: Config = {
 
   themeConfig: {
     // 项目的社交卡片图像
-    image: 'img/docusaurus-social-card.jpg', 
+    image: 'img/docusaurus-social-card.jpg',
+    mtx: {
+      components: {
+        // 默认使用你的 CustomCodeBlock 组件
+        code: require.resolve('./src/theme/CodeBlock/VsCode/CustomCodeBlock.tsx'),
+      },
+    },
     navbar: {
       title: 'HXLoLiHub', // 导航栏标题
       logo: {

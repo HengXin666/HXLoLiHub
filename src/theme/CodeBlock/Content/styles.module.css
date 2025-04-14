@@ -89,7 +89,6 @@
 .languageName {
   font-size: 0.9rem;
   color: rgb(153, 153, 136);
-  text-transform: uppercase;
   line-height: 34px;
   font-family: var(--ifm-font-family-monospace);
 }
