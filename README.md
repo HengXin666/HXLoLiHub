@@ -39,3 +39,11 @@ $ GIT_USER=<您的 GitHub 用户名>yarn deploy
 ```
 
 如果您使用 GitHub pages 进行托管，此命令是构建网站并推送到 gh-pages 分支的便捷方式。
+
+### 依赖
+
+- [代码块（CodeBlock）显示语言名称](https://jdocs.wiki/docusaurus-site/site-creation-guide/code-block-show-language-name)
+
+- [添加Remark Github Alert插件](https://jdocs.wiki/docusaurus-site/plugins/plugins-remarkjs-github-alerts): [remark-github-alerts](https://github.com/hyoban/remark-github-alerts)
+
+- [数学渲染 KaTeX](https://docusaurus.nodejs.cn/docs/markdown-features/math-equations)

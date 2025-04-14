@@ -1,8 +1,10 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import remarkGithubAlerts from 'remark-github-alerts';
-import rehypeImgWidth from './src/plugins/rehype-img-width'
+import remarkGithubAlerts from 'remark-github-alerts'; // Github tip标签渲染
+import remarkMath from 'remark-math';   // 数学渲染
+import rehypeKatex from 'rehype-katex'; // katex渲染
+// import remarkImageWidth from './src/remark/image-width';
 
 
 // 站点配置
@@ -37,28 +39,40 @@ const config: Config = {
           sidebarPath: './sidebars.ts', // 引入自定义的侧边栏配置文件
           remarkPlugins: [
             remarkGithubAlerts,
-            rehypeImgWidth,
+            remarkMath,
+            // remarkImageWidth,
+          ],
+          rehypePlugins: [
+            rehypeKatex,
           ],
           editUrl:
-            'https://github.com/HengXin666/HXLoLiHub/edit/main/docs/', // 文档编辑链接，指向 GitHub 项目
+            'https://github.com/HengXin666/HXLoLiHub/edit/main/', // 文档编辑链接，指向 GitHub 项目
         },
         blog: {
           showReadingTime: true, // 显示博客阅读时间
           remarkPlugins: [
             remarkGithubAlerts,
-            rehypeImgWidth,
+            remarkMath,
+            // remarkImageWidth,
+          ],
+          rehypePlugins: [
+            rehypeKatex,
           ],
           feedOptions: {
             type: ['rss', 'atom'], // 支持的博客订阅格式
             xslt: true,
           },
           editUrl:
-            'https://github.com/HengXin666/HXLoLiHub/edit/main/blog/', // 博客编辑链接，指向 GitHub 项目
+            'https://github.com/HengXin666/HXLoLiHub/edit/main/', // 博客编辑链接，指向 GitHub 项目
         },
         pages: {
           remarkPlugins: [
             remarkGithubAlerts,
-            rehypeImgWidth
+            remarkMath,
+            // remarkImageWidth
+          ],
+          rehypePlugins: [
+            rehypeKatex,
           ],
         },
         theme: {
@@ -66,6 +80,15 @@ const config: Config = {
         },
       } satisfies Preset.Options,
     ],
+  ],
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      type: 'text/css',
+      integrity:
+        'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
+      crossorigin: 'anonymous',
+    },
   ],
 
   themeConfig: {
@@ -122,13 +145,13 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} HXLoLiHub, Inc. Built with Docusaurus.`, // 页脚版权信息
+      copyright: `Copyright © ${new Date().getFullYear()} HXLoLiHub, Inc. Built with Docusaurus.<br>本站所有作品均采用CC BY-NC-ND 4.0许可协议, 未经允许, 禁止用于商业用途, 转载需注明出处.`, // 页脚版权信息
     },
     prism: {
       theme: prismThemes.github, // 默认的代码高亮主题
       darkTheme: prismThemes.dracula, // 深色模式下的代码高亮主题
     },
-  } satisfies Preset.ThemeConfig,
+  } satisfies Preset.ThemeConfig, 
 };
 
 export default config;
