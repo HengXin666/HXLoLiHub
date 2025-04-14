@@ -45,15 +45,15 @@ ABC`中文`
 # 为什么不能这样
 ## 1.
 
-![alttext ##w300px##](PixPin_2025-04-13_23-21-43.png)
+![alt text ##w100##](./PixPin_2025-04-13_23-21-43.png)
 
-![alt text ##w100%##](PixPin_2025-04-13_23-21-43.png)
-
-![alt text ##w300##](PixPin_2025-04-13_23-21-43.png)
+![alt text](PixPin_2025-04-13_23-21-43.png)
 
 |图片|为什么|
 |:-:|-:|
 |表格|不是居中|
+
+- [x] 根本不对
 
 > [!NOTE]
 > Useful information that users should know, even when skimming content.

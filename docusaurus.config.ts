@@ -4,8 +4,6 @@ import type * as Preset from '@docusaurus/preset-classic';
 import remarkGithubAlerts from 'remark-github-alerts'; // Github tip标签渲染
 import remarkMath from 'remark-math';   // 数学渲染
 import rehypeKatex from 'rehype-katex'; // katex渲染
-// import remarkImageWidth from './src/remark/image-width';
-
 
 // 站点配置
 const config: Config = {
@@ -30,30 +28,34 @@ const config: Config = {
     locales: ['zh-Hans'], // 只支持简体中文
   },
 
+  plugins: [
+    'plugin-image-zoom', // 图片单击放大
+  ],
+
   // 使用 presets 配置
   presets: [
     [
       '@docusaurus/preset-classic',
       {
         docs: {
+          include: ['**/*.{md,mdx}'],
           sidebarPath: './sidebars.ts', // 引入自定义的侧边栏配置文件
           remarkPlugins: [
             remarkGithubAlerts,
             remarkMath,
-            // remarkImageWidth,
           ],
           rehypePlugins: [
             rehypeKatex,
           ],
           editUrl:
             'https://github.com/HengXin666/HXLoLiHub/edit/main/', // 文档编辑链接，指向 GitHub 项目
+          showLastUpdateTime: true, // 显示最后编辑时间
         },
         blog: {
           showReadingTime: true, // 显示博客阅读时间
           remarkPlugins: [
             remarkGithubAlerts,
             remarkMath,
-            // remarkImageWidth,
           ],
           rehypePlugins: [
             rehypeKatex,
@@ -64,16 +66,17 @@ const config: Config = {
           },
           editUrl:
             'https://github.com/HengXin666/HXLoLiHub/edit/main/', // 博客编辑链接，指向 GitHub 项目
+          showLastUpdateTime: true, // 显示最后编辑时间
         },
         pages: {
           remarkPlugins: [
             remarkGithubAlerts,
             remarkMath,
-            // remarkImageWidth
           ],
           rehypePlugins: [
             rehypeKatex,
           ],
+          showLastUpdateTime: true, // 显示最后编辑时间
         },
         theme: {
           customCss: './src/css/custom.css', // 可以放置自定义的 CSS 样式
@@ -81,7 +84,7 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-  stylesheets: [
+  stylesheets: [ // 数学公式所需样式
     {
       href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
       type: 'text/css',
