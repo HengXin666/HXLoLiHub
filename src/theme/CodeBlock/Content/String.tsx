@@ -16,14 +16,15 @@ import WordWrapButton from '@theme/CodeBlock/WordWrapButton';
 import Container from '@theme/CodeBlock/Container';
 import type { Props } from '@theme/CodeBlock/Content/String';
 
+import { FaCheck } from 'react-icons/fa'; // 引入勾选图标
+import { Tooltip } from 'react-tooltip'; // 可选，使用 react-tooltip 提示信息
+
 import * as monaco from "monaco-editor";
 import MonacoEditor from 'react-monaco-editor'; // VSCode 编辑器
 import { loader } from '@monaco-editor/react';
-import { debounce } from 'lodash'; // 引入 lodash 的 debounce 防抖函数
 
 import monacoThemes from './OneDark-Pro.json';
 import styles from './styles.module.css';
-
 
 // 创建主题
 loader.init().then((monaco) => {
@@ -96,19 +97,38 @@ export default function CodeBlockString ({
         const [code, setCode] = useState<string>(children);
         const [editorHeight, setEditorHeight] = useState<number>(200); // 初始高度
 
-        const handleChange = useCallback(
-            debounce((newCode: string) => {
-                setCode(newCode);
-                const lines = newCode.split('\n').length;
-                const newHeight = lines * 20; // 每行20px
-                setEditorHeight(newHeight); // 更新编辑器高度
-            }, 100), // 设置防抖延迟为 300ms
-            [],
-        );
+        const [isSelectedCopy, setIsSelectedCopy] = useState(false); // 控制是否显示钩选图标(复制时候)
+        const [isSelected, setIsSelected] = useState(false); // 控制是否显示钩选图标(还原时候)
+        const [tooltipVisible, setTooltipVisible] = useState(false); // 控制提示框显示
+
+        // 复制到剪贴板函数
+        const copyToClipboard = () => {
+            navigator.clipboard.writeText(code).then(() => {
+                setIsSelectedCopy(true); // 点击后显示钩选
+                setTooltipVisible(true); // 显示提示框
+                setTimeout(() => {
+                    setIsSelectedCopy(false); // 1.5秒后取消钩选状态
+                    setTooltipVisible(false); // 隐藏提示框
+                }, 1500);
+            });
+        };
+
+        const handleChange = (newCode: string) => {
+            setCode(newCode);
+            const lines = newCode.split('\n').length;
+            const newHeight = lines * 20; // 每行20px
+            setEditorHeight(newHeight); // 更新编辑器高度
+        };
 
         const handleReset = () => {
+            setIsSelected(true);
             setCode(children);      // 还原代码
             handleChange(children); // 更新高度
+            setTooltipVisible(true); // 显示提示框
+            setTimeout(() => {
+                setIsSelected(false); // 1.5秒后取消钩选状态
+                setTooltipVisible(false); // 隐藏提示框
+            }, 1500);
         };
 
         // 初始化编辑器
@@ -138,9 +158,9 @@ export default function CodeBlockString ({
                 import(`monaco-editor/esm/vs/basic-languages/${fkLanguageEscape}/${fkLanguageEscape}`)
                     .then(() => { })
                     .catch(() => { });
-                
+
             });
-                
+
             monaco.editor.createModel(code, fkLanguageEscape);
 
             return () => {
@@ -155,8 +175,54 @@ export default function CodeBlockString ({
                 marginTop: '20px', marginBottom: '20px'
             }}>
                 <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', justifyContent: 'right' }}>
-                    <button onClick={handleReset} style={{ padding: '5px 10px', fontSize: '14px' }}>还原代码</button>
-                    <button style={{ padding: '5px 10px', fontSize: '14px' }}>{fkPrefixLanguage}</button>
+                <button
+                        onClick={handleReset}
+                        style={{
+                            padding: '5px 10px',
+                            fontSize: '14px',
+                            backgroundColor: isSelected ? '#4CAF50' : '#990099', // 勾选后背景色变化
+                            color: 'white',
+                            borderRadius: '5px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            position: 'relative',
+                            transition: 'background-color 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
+                        {isSelected && (
+                            <FaCheck style={{
+                                marginRight: '5px',
+                                animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                            }} />
+                        )}
+                        {'还原'}
+                    </button>
+                    <button
+                        onClick={copyToClipboard}
+                        style={{
+                            padding: '5px 10px',
+                            fontSize: '14px',
+                            backgroundColor: isSelectedCopy ? '#4CAF50' : '#990099', // 勾选后背景色变化
+                            color: 'white',
+                            borderRadius: '5px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            position: 'relative',
+                            transition: 'background-color 0.3s',
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
+                        {isSelectedCopy && (
+                            <FaCheck style={{
+                                marginRight: '5px',
+                                animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                            }} />
+                        )}
+                        {fkPrefixLanguage}
+                    </button>
                 </div>
                 <>
                     <MonacoEditor
@@ -164,7 +230,7 @@ export default function CodeBlockString ({
                         value={code}
                         onChange={handleChange}
                         editorWillMount={() => {
-                            handleReset()
+                            handleChange(children); // 更新高度
                         }}
                         options={{
                             minimap: { enabled: false },
