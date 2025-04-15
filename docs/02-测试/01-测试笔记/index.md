@@ -26,11 +26,17 @@ int main() {
 ```cpp VsCode
 int main() {
     // 这个是交互式的!
+    return 0;
 }
 ```
 
-```js VsCode
-1 
+```css VsCode
+.languageName {
+  font-size: 0.9rem;
+  color: rgb(153, 153, 136);
+  line-height: 34px;
+  font-family: var(--ifm-font-family-monospace);
+}
 ```
 
 $\sum_{i=0}^{n-1} \sum_{j=0}^{i-1} |i + j|$
