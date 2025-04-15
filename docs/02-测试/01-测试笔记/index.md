@@ -23,6 +23,15 @@ int main() {
 }
 ```
 
+```cpp VsCode
+int main() {
+    // 这个是交互式的!
+}
+```
+
+```js VsCode
+1 
+```
 
 $\sum_{i=0}^{n-1} \sum_{j=0}^{i-1} |i + j|$
 
