@@ -11,9 +11,21 @@
 #### 2.2.1 测试子子目录
 #### 2.2.2 测试子子目录
 
+```javascript [group1-JavaScript] vscode
+console.log('你好力扣')
+```
+
+```python [group1-Python]
+print('你好力扣')
+```
+
+```ruby [group2-Ruby]
+puts '你好力扣'
+```
+
 ```cpp
 int main() {
-    // 这个是交互式的!
+    return 0;
 }
 ```
 

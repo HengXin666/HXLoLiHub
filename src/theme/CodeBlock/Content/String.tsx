@@ -1,5 +1,5 @@
 import React, { type ReactNode } from 'react';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useContext, createContext } from 'react';
 import clsx from 'clsx';
 import { useThemeConfig, usePrismTheme } from '@docusaurus/theme-common';
 import {
@@ -16,12 +16,18 @@ import WordWrapButton from '@theme/CodeBlock/WordWrapButton';
 import Container from '@theme/CodeBlock/Container';
 import type { Props } from '@theme/CodeBlock/Content/String';
 
+// 选项卡
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { FaCheck } from 'react-icons/fa'; // 引入勾选图标
 import type * as Monaco from 'monaco-editor'; // 仅引入类型
 
 import monacoThemes from './OneDark-Pro.json';
 import styles from './styles.module.css';
+
+import './css.css';
 
 function languageEscape (language: string | undefined): string | undefined {
     language = language?.toLowerCase();
@@ -66,7 +72,7 @@ function normalizeLanguage (language: string | undefined): string | undefined {
  * @param fkPrefixLanguage 
  * @returns 
  */
-function makeSimpleCodeBlock ({
+function MakeSimpleCodeBlock ({
     children,
     className: blockClassName = '',
     metastring,
@@ -367,6 +373,18 @@ function makeVsCodeCodeBlock ({
     );
 }
 
+type SimpleCodeBlockType = Props & { fkPrefixLanguage: string };
+
+interface GroupedCodeBlocks {
+    [groupName: string]: { data: SimpleCodeBlockType, uesTitle: string }[];
+}
+
+let GroupedBlocks: GroupedCodeBlocks = {};  // 普通变量
+
+function makeTestCodeBlock () {
+
+}
+
 export default function CodeBlockString ({
     children,
     className: blockClassName = '',
@@ -378,9 +396,65 @@ export default function CodeBlockString ({
     // 获取语言
     const fkPrefixLanguage: string = blockClassName.length ? blockClassName.split("-")[1] : '';
 
+    // 解析 metastring 判断是否包含 [groupX-语言] 格式
+    const match = metastring?.match(/\[group(\d+)-(\w+)\]/); // 提取 group1, Python 等
+    if (match) {
+        const groupedBlocks = GroupedBlocks;
+
+        const groupName: string = match[1]; // group1
+        const languageName = match[2]; // Python, C++ 等
+
+        metastring = languageName;
+
+        let len: number = groupedBlocks[groupName]?.length || 0;
+        
+        if (!groupedBlocks[groupName]) {
+            groupedBlocks[groupName] = [];  // 如果没有，初始化为一个空数组
+        }
+
+        useEffect(() => {
+            groupedBlocks[groupName].push({
+                data: {
+                    children,
+                    className: blockClassName || '',
+                    metastring,
+                    title: titleProp,
+                    showLineNumbers: showLineNumbersProp,
+                    language: languageProp,
+                    fkPrefixLanguage
+                },
+                uesTitle: languageName
+            });
+        }, []);
+
+        // 到时候记忆一下, 分组的第一个语言, 即可! (手动给他们自增一下, 不是第一个的返回<>)
+
+        return (
+            <Tabs>
+                {groupedBlocks[groupName] ? <TabItem value='1'></TabItem> : <></>}
+                {groupedBlocks[groupName].map((item, index) => {
+                    console.log(item, index);
+                    return (
+                        <TabItem value={item.uesTitle}>
+                            <MakeSimpleCodeBlock 
+                                children={item.data.children}
+                                className={item.data.className}
+                                metastring={item.data.metastring}
+                                title={item.data.title}
+                                showLineNumbers={item.data.showLineNumbers}
+                                language={item.data.language}
+                                fkPrefixLanguage={item.data.fkPrefixLanguage}
+                            />
+                        </TabItem>
+                    )
+                })}
+            </Tabs>
+        );
+    }
+
     // 为我们自定义的结构 (VsCode 渲染)
     if (metastring?.length === 6 && metastring.toUpperCase() === "VSCODE") {
-        return <BrowserOnly fallback={<div>Loading...</div>}>{
+        return <BrowserOnly fallback={<div>加载中...</div>}>{
             () => makeVsCodeCodeBlock({
                 children,
                 className: blockClassName = '',
@@ -393,7 +467,7 @@ export default function CodeBlockString ({
     }
 
     // 默认代码块
-    return makeSimpleCodeBlock({
+    return MakeSimpleCodeBlock({
         children,
         className: blockClassName = '',
         metastring,

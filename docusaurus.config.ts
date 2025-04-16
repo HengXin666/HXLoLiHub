@@ -11,7 +11,7 @@ const config: Config = {
   tagline: "妹宅知识管理系统！", // 项目的 tagline（副标题）
   favicon: "img/favicon.ico", // 项目图标，可以根据实际情况更换
 
-  // 站点的URL，GitHub Pages 一般需要设置为项目的路径
+  // 站点的URL, GitHub Pages 一般需要设置为项目的路径
   url: "https://HengXin666.github.io", // GitHub Pages 地址
   baseUrl: "/HXLoLiHub/", // 基础路径
 
@@ -22,7 +22,7 @@ const config: Config = {
   onBrokenLinks: "warn", // 如果链接损坏则发出警告
   onBrokenMarkdownLinks: "warn", // Markdown 链接损坏警告
 
-  // 国际化配置（如果是中文站点，可以将 locales 设置为 zh）
+  // 国际化配置
   i18n: {
     defaultLocale: "zh-Hans", // 默认语言为简体中文
     locales: ["zh-Hans"], // 只支持简体中文
@@ -133,11 +133,12 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} HXLoLiHub, Inc. Built with Docusaurus.<br>本站所有作品均采用CC BY-NC-ND 4.0许可协议, 未经允许, 禁止用于商业用途, 转载需注明出处.`, // 页脚版权信息
+      copyright: `版权所有 © ${new Date().getFullYear()} HXLoLiHub, Inc. 由 Docusaurus 构建.<br>本站所有作品均采用CC BY-NC-ND 4.0许可协议.<br>未经允许, 禁止用于商业用途, 转载需注明出处.`, // 页脚版权信息
     },
     prism: {
       theme: prismThemes.github, // 默认的代码高亮主题
       darkTheme: prismThemes.dracula, // 深色模式下的代码高亮主题
+      // additionalLanguages: ['cpp'],
     },
   } satisfies Preset.ThemeConfig,
 };

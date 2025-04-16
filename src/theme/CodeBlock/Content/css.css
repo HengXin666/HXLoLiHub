@@ -1,0 +1,38 @@
+/* custom.css */
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .tabs button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background: lightgray;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+  }
+  
+  .tabs button.active {
+    background: #0070f3;
+    color: white;
+  }
+  
+  .tab-content {
+    margin-top: 20px;
+  }
+  
+  .code-block {
+    margin-bottom: 20px;
+  }
+  
+  .code-block h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  pre {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
