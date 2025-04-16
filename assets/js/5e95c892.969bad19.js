@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkhx_loli_hub=self.webpackChunkhx_loli_hub||[]).push([[647],{8122:(e,s,r)=>{r.r(s),r.d(s,{default:()=>t});r(6540);var u=r(4164),l=r(1769),h=r(204),a=r(2831),c=r(1745),n=r(4848);function t(e){return(0,n.jsx)(l.e3,{className:(0,u.A)(h.G.wrapper.docsPages),children:(0,n.jsx)(c.A,{children:(0,a.v)(e.route.routes)})})}}}]);
