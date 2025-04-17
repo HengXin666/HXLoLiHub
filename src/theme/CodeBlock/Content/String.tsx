@@ -476,16 +476,10 @@ export default function CodeBlockString ({
                 {groupedBlocks[groupName].list.map((item, index) => {
                     // 这里抽风了, 如果你的编译器报错, 请忽略
                     return (
-                        <TabItem value={item.uesTitle} default>
-                            <MakeSimpleCodeBlock
-                                children={item.data.children}
-                                className={item.data.className}
-                                metastring={item.data.metastring}
-                                title={item.data.title}
-                                showLineNumbers={item.data.showLineNumbers}
-                                language={item.data.language}
-                                fkPrefixLanguage={item.data.fkPrefixLanguage}
-                            />
+                        <TabItem 
+                            value={item.uesTitle}
+                        >
+                            {MakeSimpleCodeBlock(item.data, item.data.fkPrefixLanguage)}
                         </TabItem>
                     )
                 })}

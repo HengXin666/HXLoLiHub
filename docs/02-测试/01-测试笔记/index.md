@@ -25,7 +25,7 @@ print('你好力扣')
 puts '你好力扣'
 ```
 
-```cpp
+```cpp [分组1-cpp]
 int main() {
     return 0;
 }

@@ -1,38 +1,51 @@
-/* custom.css */
-.tabs {
+/* 整体背景色 */
+.tabs__list {
     display: flex;
-    margin-bottom: 20px;
+    background-color: #303030; /* 深灰色背景 */
+    padding: 8px 16px;
+    list-style: none; /* 去掉默认列表样式 */
   }
   
-  .tabs button {
-    padding: 10px 20px;
+  .tabs__item {
+    color: #656567; /* 未选中的字体颜色（白灰色） */
+    font-size: 16px;
+    padding: 8px 16px;
     cursor: pointer;
-    background: lightgray;
-    border: 1px solid #ccc;
-    margin-right: 5px;
+    margin-right: 0; /* 删除右边距，改为边框分隔 */
+    position: relative; /* 用于伪元素定位 */
+
   }
   
-  .tabs button.active {
-    background: #0070f3;
-    color: white;
+  .tabs__item::after {
+    content: ''; /* 添加伪元素 */
+    position: absolute;
+    right: 0px; /* 调整位置，让分隔线在两项之间 */
+    top: 14px;
+    bottom: 14px;
+    width: 2px; /* 细边框 */
+    background-color: #555; /* 分割线颜色 */
   }
   
-  .tab-content {
-    margin-top: 20px;
+  .tabs__item--active {
+    color: #FFFFFF; /* 选中的字体颜色（亮米白色） */
   }
   
-  .code-block {
-    margin-bottom: 20px;
+  .tabs__item:not(.tabs__item--active):hover {
+    color: #ffffff; /* 鼠标悬停时，未选中项变成白色 */
   }
   
-  .code-block h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
+  .tabs__item:last-child::after {
+    content: none; /* 最后一个选项卡不显示右边框 */
   }
   
-  pre {
-    background-color: #f4f4f4;
-    padding: 10px;
-    border-radius: 4px;
+  .tabs__panel {
+    padding: 16px;
+    border: 1px solid #ddd;
+    display: none; /* 默认隐藏 */
+    transition: opacity 0.3s ease;
+  }
+  
+  .tabs__panel--active {
+    display: block;
   }
   
