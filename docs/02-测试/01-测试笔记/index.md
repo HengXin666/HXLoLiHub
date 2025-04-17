@@ -11,15 +11,17 @@
 #### 2.2.1 测试子子目录
 #### 2.2.2 测试子子目录
 
-```javascript [group1-JavaScript] vscode
+[自连接](./index.md)
+
+```javascript [分组1-JavaScript] vscode
 console.log('你好力扣')
 ```
 
-```python [group1-Python]
+```python [分组1-Python]
 print('你好力扣')
 ```
 
-```ruby [group1-Ruby]
+```ruby [分组1-Ruby]
 puts '你好力扣'
 ```
 

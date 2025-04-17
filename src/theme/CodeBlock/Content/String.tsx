@@ -381,7 +381,10 @@ function makeVsCodeCodeBlock ({
 type SimpleCodeBlockType = Props & { fkPrefixLanguage: string };
 
 interface GroupedCodeBlocks {
-    [groupName: string]: { data: SimpleCodeBlockType, uesTitle: string }[];
+    [groupName: string]: { 
+        head: string, // uesTitle
+        list: { data: SimpleCodeBlockType, uesTitle: string }[]
+    };
 }
 
 type Store = {
@@ -393,24 +396,7 @@ type Store = {
     ) => void;
 };
 
-function _addCodeBlock (
-    groupedBlocks: GroupedCodeBlocks,
-    key: string,
-    item: { data: SimpleCodeBlockType, uesTitle: string }
-) {
-    if (groupedBlocks[key] === undefined) {
-        groupedBlocks[key] = [];
-        groupedBlocks[key].push(item);
-        return;
-    }
-    const alreadyExists = groupedBlocks[key].some(it => it.uesTitle === item.uesTitle);
-
-    if (!alreadyExists) {
-        groupedBlocks[key].push(item);
-    }
-}
-
-// let GroupedBlocks: GroupedCodeBlocks = {};  // 普通变量
+// 记录上一次的url, 如果url不同, 那么就初始化 useStore
 let maeLocation: string = '';
 
 const useStore = create<Store>()(
@@ -420,14 +406,16 @@ const useStore = create<Store>()(
         addCodeBlock: (groupName, item) =>
             set((state) => {
                 if (state.groupedBlocks[groupName] === undefined) {
-                    state.groupedBlocks[groupName] = [];
-                    state.groupedBlocks[groupName].push(item);
+                    state.groupedBlocks[groupName] = {
+                        head: item.uesTitle , 
+                        list: [item]
+                    };
                     return;
                 }
-                const alreadyExists = state.groupedBlocks[groupName].some(it => it.uesTitle === item.uesTitle);
+                const alreadyExists = state.groupedBlocks[groupName].list.some(it => it.uesTitle === item.uesTitle);
             
                 if (!alreadyExists) {
-                    state.groupedBlocks[groupName].push(item);
+                    state.groupedBlocks[groupName].list.push(item);
                 }
             }),
     }))
@@ -469,9 +457,6 @@ export default function CodeBlockString ({
         const titleName = match[2]; // Python, C++ 等
 
         metastring = titleName;
-
-        let len: number = groupedBlocks[groupName]?.length || 0;
-
         addCodeBlock(groupName, {
             data: {
                 children,
@@ -484,13 +469,12 @@ export default function CodeBlockString ({
             },
             uesTitle: titleName
         });
-        console.log(groupedBlocks);
 
-        // 到时候记忆一下, 分组的第一个语言, 即可! (手动给他们自增一下, 不是第一个的返回<>)
-
-        return groupedBlocks[groupName] ? (
+        // 到时候记忆一下, 分组的第一个语言, 即可! (不是第一个的返回<>)
+        return groupedBlocks[groupName] && groupedBlocks[groupName].head === titleName ? (
             <Tabs>
-                {groupedBlocks[groupName].map((item, index) => {
+                {groupedBlocks[groupName].list.map((item, index) => {
+                    // 这里抽风了, 如果你的编译器报错, 请忽略
                     return (
                         <TabItem value={item.uesTitle} default>
                             <MakeSimpleCodeBlock
