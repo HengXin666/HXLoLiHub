@@ -77,16 +77,19 @@ function normalizeLanguage (language: string | undefined): string | undefined {
  * @param fkPrefixLanguage 
  * @returns 
  */
-function MakeSimpleCodeBlock ({
-    children,
-    className: blockClassName = '',
-    metastring,
-    title: titleProp,
-    showLineNumbers: showLineNumbersProp,
-    language: languageProp,
-}: Props,
-    fkPrefixLanguage: string
+function MakeSimpleCodeBlock(
+    props: Props & {fkPrefixLanguage: string}
 ) {
+    const {
+        children,
+        className: blockClassName = '',
+        metastring,
+        title: titleProp,
+        showLineNumbers: showLineNumbersProp,
+        language: languageProp,
+        fkPrefixLanguage
+    } = props;
+
     const {
         prism: { defaultLanguage, magicComments },
     } = useThemeConfig();
@@ -378,10 +381,10 @@ function makeVsCodeCodeBlock ({
     );
 }
 
-type SimpleCodeBlockType = Props & { fkPrefixLanguage: string };
+type SimpleCodeBlockType = { props: Props } & { fkPrefixLanguage: string };
 
 interface GroupedCodeBlocks {
-    [groupName: string]: { 
+    [groupName: string]: {
         head: string, // uesTitle
         list: { data: SimpleCodeBlockType, uesTitle: string }[]
     };
@@ -407,13 +410,13 @@ const useStore = create<Store>()(
             set((state) => {
                 if (state.groupedBlocks[groupName] === undefined) {
                     state.groupedBlocks[groupName] = {
-                        head: item.uesTitle , 
+                        head: item.uesTitle,
                         list: [item]
                     };
                     return;
                 }
                 const alreadyExists = state.groupedBlocks[groupName].list.some(it => it.uesTitle === item.uesTitle);
-            
+
                 if (!alreadyExists) {
                     state.groupedBlocks[groupName].list.push(item);
                 }
@@ -459,12 +462,14 @@ export default function CodeBlockString ({
         metastring = titleName;
         addCodeBlock(groupName, {
             data: {
-                children,
-                className: blockClassName || '',
-                metastring,
-                title: titleProp,
-                showLineNumbers: showLineNumbersProp,
-                language: languageProp,
+                props: {
+                    children,
+                    className: blockClassName || '',
+                    metastring,
+                    title: titleProp,
+                    showLineNumbers: showLineNumbersProp,
+                    language: languageProp
+                },
                 fkPrefixLanguage
             },
             uesTitle: titleName
@@ -476,10 +481,13 @@ export default function CodeBlockString ({
                 {groupedBlocks[groupName].list.map((item, index) => {
                     // 这里抽风了, 如果你的编译器报错, 请忽略
                     return (
-                        <TabItem 
+                        <TabItem
                             value={item.uesTitle}
                         >
-                            {MakeSimpleCodeBlock(item.data, item.data.fkPrefixLanguage)}
+                            <MakeSimpleCodeBlock
+                                {...item.data.props} // 得这样传递, 多个参数真难搞
+                                fkPrefixLanguage={item.data.fkPrefixLanguage}
+                            />
                         </TabItem>
                     )
                 })}
@@ -509,5 +517,6 @@ export default function CodeBlockString ({
         title: titleProp,
         showLineNumbers: showLineNumbersProp,
         language: languageProp,
-    }, fkPrefixLanguage);
+        fkPrefixLanguage
+    });
 }

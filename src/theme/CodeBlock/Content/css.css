@@ -8,12 +8,14 @@
   
   .tabs__item {
     color: #656567; /* 未选中的字体颜色（白灰色） */
-    font-size: 16px;
-    padding: 8px 16px;
+    padding: 8px 12px;
     cursor: pointer;
     margin-right: 0; /* 删除右边距，改为边框分隔 */
     position: relative; /* 用于伪元素定位 */
 
+    /* 力扣同款字体 */
+    font-family: Menlo, sans-serif;
+    font-size: 14px;
   }
   
   .tabs__item::after {
@@ -24,6 +26,7 @@
     bottom: 14px;
     width: 2px; /* 细边框 */
     background-color: #555; /* 分割线颜色 */
+    /* border-bottom-color: #990099; */
   }
   
   .tabs__item--active {
