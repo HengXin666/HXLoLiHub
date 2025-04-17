@@ -32,7 +32,7 @@ import type * as Monaco from 'monaco-editor'; // 仅引入类型
 import monacoThemes from './OneDark-Pro.json';
 import styles from './styles.module.css';
 
-import './css.css';
+import './leetcode.css';
 
 function languageEscape (language: string | undefined): string | undefined {
     language = language?.toLowerCase();
@@ -77,8 +77,8 @@ function normalizeLanguage (language: string | undefined): string | undefined {
  * @param fkPrefixLanguage 
  * @returns 
  */
-function MakeSimpleCodeBlock(
-    props: Props & {fkPrefixLanguage: string}
+function MakeSimpleCodeBlock (
+    props: Props & { fkPrefixLanguage: string }
 ) {
     const {
         children,
@@ -87,7 +87,7 @@ function MakeSimpleCodeBlock(
         title: titleProp,
         showLineNumbers: showLineNumbersProp,
         language: languageProp,
-        fkPrefixLanguage
+        fkPrefixLanguage,
     } = props;
 
     const {
@@ -116,61 +116,121 @@ function MakeSimpleCodeBlock(
         magicComments,
     });
 
-    return (
-        <Container
-            as="div"
-            className={clsx(
-                blockClassName,
-                language &&
-                !blockClassName.includes(`language-${language}`) &&
-                `language-${language}`,
-            )}>
-            {title && <div className={styles.codeBlockTitle}>{title}</div>}
-            <div className={styles.codeBlockContent}>
-                <Highlight
-                    theme={prismTheme}
-                    code={code}
-                    language={(language ?? 'text') as Language}>
-                    {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                        <pre
-                            /* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */
-                            tabIndex={0}
-                            ref={wordWrap.codeBlockRef}
-                            className={clsx(className, styles.codeBlock, 'thin-scrollbar')}
-                            style={style}>
-                            <code
-                                className={clsx(
-                                    styles.codeBlockLines,
-                                    showLineNumbers && styles.codeBlockLinesWithNumbering,
-                                )}>
-                                {tokens.map((line, i) => (
-                                    <Line
-                                        key={i}
-                                        line={line}
-                                        getLineProps={getLineProps}
-                                        getTokenProps={getTokenProps}
-                                        classNames={lineClassNames[i]}
-                                        showLineNumbers={showLineNumbers}
-                                    />
-                                ))}
-                            </code>
-                        </pre>
-                    )}
-                </Highlight>
-                <div className={styles.buttonGroup}>
-                    {fkPrefixLanguage && <span className={styles.languageName}>{fkPrefixLanguage}</span>}
-                    {(wordWrap.isEnabled || wordWrap.isCodeScrollable) && (
-                        <WordWrapButton
-                            className={styles.codeButton}
-                            onClick={() => wordWrap.toggle()}
-                            isEnabled={wordWrap.isEnabled}
-                        />
-                    )}
-                    <CopyButton className={styles.codeButton} code={code} />
+    return blockClassName === 'leetcode'
+        ? (
+            <Container
+                as="div"
+                className={clsx(
+                    blockClassName,
+                    language &&
+                    !blockClassName.includes(`language-${language}`) &&
+                    `language-${language}`,
+                )}
+            >
+                {title && <div className={styles.codeBlockTitle}>{title}</div>}
+                {/* 这里有内鬼 */}
+                <div 
+                    className={clsx(styles.codeBlockContent, 'leetcode-tabs-content')}
+                    style={{borderTopLeftRadius: '0px', borderTopRightRadius: '0px'}}
+                >
+                    <Highlight
+                        theme={prismTheme}
+                        code={code}
+                        language={(language ?? 'text') as Language}>
+                        {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                            <pre
+                                /* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */
+                                tabIndex={0}
+                                ref={wordWrap.codeBlockRef}
+                                className={clsx(className, styles.codeBlock, 'thin-scrollbar')}>
+                                <code
+                                    className={clsx(
+                                        styles.codeBlockLines,
+                                        showLineNumbers && styles.codeBlockLinesWithNumbering,
+                                    )}>
+                                    {tokens.map((line, i) => (
+                                        <Line
+                                            key={i}
+                                            line={line}
+                                            getLineProps={getLineProps}
+                                            getTokenProps={getTokenProps}
+                                            classNames={lineClassNames[i]}
+                                            showLineNumbers={showLineNumbers}
+                                        />
+                                    ))}
+                                </code>
+                            </pre>
+                        )}
+                    </Highlight>
+                    <div className={styles.buttonGroup}>
+                        {fkPrefixLanguage && <span className={styles.languageName}>{fkPrefixLanguage}</span>}
+                        {(wordWrap.isEnabled || wordWrap.isCodeScrollable) && (
+                            <WordWrapButton
+                                className={styles.codeButton}
+                                onClick={() => wordWrap.toggle()}
+                                isEnabled={wordWrap.isEnabled}
+                            />
+                        )}
+                        <CopyButton className={styles.codeButton} code={code} />
+                    </div>
                 </div>
-            </div>
-        </Container>
-    );
+            </Container>
+        )
+        : (
+            <Container
+                as="div"
+                className={clsx(
+                    blockClassName,
+                    language &&
+                    !blockClassName.includes(`language-${language}`) &&
+                    `language-${language}`,
+                )}>
+                {title && <div className={styles.codeBlockTitle}>{title}</div>}
+                <div className={styles.codeBlockContent}>
+                    <Highlight
+                        theme={prismTheme}
+                        code={code}
+                        language={(language ?? 'text') as Language}>
+                        {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                            <pre
+                                /* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */
+                                tabIndex={0}
+                                ref={wordWrap.codeBlockRef}
+                                className={clsx(className, styles.codeBlock, 'thin-scrollbar')}
+                                style={style}>
+                                <code
+                                    className={clsx(
+                                        styles.codeBlockLines,
+                                        showLineNumbers && styles.codeBlockLinesWithNumbering,
+                                    )}>
+                                    {tokens.map((line, i) => (
+                                        <Line
+                                            key={i}
+                                            line={line}
+                                            getLineProps={getLineProps}
+                                            getTokenProps={getTokenProps}
+                                            classNames={lineClassNames[i]}
+                                            showLineNumbers={showLineNumbers}
+                                        />
+                                    ))}
+                                </code>
+                            </pre>
+                        )}
+                    </Highlight>
+                    <div className={styles.buttonGroup}>
+                        {fkPrefixLanguage && <span className={styles.languageName}>{fkPrefixLanguage}</span>}
+                        {(wordWrap.isEnabled || wordWrap.isCodeScrollable) && (
+                            <WordWrapButton
+                                className={styles.codeButton}
+                                onClick={() => wordWrap.toggle()}
+                                isEnabled={wordWrap.isEnabled}
+                            />
+                        )}
+                        <CopyButton className={styles.codeButton} code={code} />
+                    </div>
+                </div>
+            </Container>
+        );
 }
 
 /**
@@ -436,8 +496,56 @@ function initComponent () {
     return { groupedBlocks, addCodeBlock };
 }
 
-function makeTestCodeBlock () {
+function makeTabsCodeBlock ({
+    children,
+    className: blockClassName = '',
+    metastring,
+    title: titleProp,
+    showLineNumbers: showLineNumbersProp,
+    language: languageProp,
+}: Props,
+    fkPrefixLanguage: string,
+    groupName: string,
+    titleName: string
+) {
+    const { groupedBlocks, addCodeBlock } = initComponent();
+    metastring = '';
 
+    addCodeBlock(groupName, {
+        data: {
+            props: {
+                children,
+                className: 'leetcode',
+                metastring,
+                title: titleProp,
+                showLineNumbers: showLineNumbersProp,
+                language: languageProp
+            },
+            fkPrefixLanguage
+        },
+        uesTitle: titleName
+    });
+
+    // 到时候记忆一下, 分组的第一个语言, 即可! (不是第一个的返回<>)
+    return groupedBlocks[groupName] && groupedBlocks[groupName].head === titleName ? (
+        <div className="leetcode_tabs_block">
+            <Tabs className="leetcode_tabs">
+                {groupedBlocks[groupName].list.map((item, index) => {
+                    // 这里抽风了, 如果你的编译器报错, 请忽略
+                    return (
+                        <TabItem
+                            value={item.uesTitle}
+                        >
+                            <MakeSimpleCodeBlock
+                                {...item.data.props} // 得这样传递, 多个参数真难搞
+                                fkPrefixLanguage={item.data.fkPrefixLanguage}
+                            />
+                        </TabItem>
+                    )
+                })}
+            </Tabs>
+        </div>
+    ) : (<></>);
 }
 
 export default function CodeBlockString ({
@@ -453,46 +561,18 @@ export default function CodeBlockString ({
     // 获取语言
     const fkPrefixLanguage: string = blockClassName.length ? blockClassName.split("-")[1] : '';
 
-    // 解析 metastring 判断是否包含 [groupX-语言] 格式
-    const match = metastring?.match(/\[(.+)-(\w+)\]/); // 提取 group1, Python 等
+    // 解析 metastring 判断是否包含 [组名-标题] 格式
+    // 特别的, 它不会被渲染为 vscode 样式, 因为没有必要.
+    const match = metastring?.match(/\[(.+)-(\w+)\]/); // 提取 组名, 标题
     if (match) {
-        const groupName: string = match[1]; // group1
-        const titleName = match[2]; // Python, C++ 等
-
-        metastring = titleName;
-        addCodeBlock(groupName, {
-            data: {
-                props: {
-                    children,
-                    className: blockClassName || '',
-                    metastring,
-                    title: titleProp,
-                    showLineNumbers: showLineNumbersProp,
-                    language: languageProp
-                },
-                fkPrefixLanguage
-            },
-            uesTitle: titleName
-        });
-
-        // 到时候记忆一下, 分组的第一个语言, 即可! (不是第一个的返回<>)
-        return groupedBlocks[groupName] && groupedBlocks[groupName].head === titleName ? (
-            <Tabs>
-                {groupedBlocks[groupName].list.map((item, index) => {
-                    // 这里抽风了, 如果你的编译器报错, 请忽略
-                    return (
-                        <TabItem
-                            value={item.uesTitle}
-                        >
-                            <MakeSimpleCodeBlock
-                                {...item.data.props} // 得这样传递, 多个参数真难搞
-                                fkPrefixLanguage={item.data.fkPrefixLanguage}
-                            />
-                        </TabItem>
-                    )
-                })}
-            </Tabs>
-        ) : (<></>);
+        return makeTabsCodeBlock({
+            children,
+            className: blockClassName = '',
+            metastring,
+            title: titleProp,
+            showLineNumbers: showLineNumbersProp,
+            language: languageProp,
+        }, fkPrefixLanguage, match[1], match[2]);
     }
 
     // 为我们自定义的结构 (VsCode 渲染)

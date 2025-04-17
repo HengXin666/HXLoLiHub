@@ -1,6 +1,6 @@
 # 开发笔记
 
-```C++
+```cpp
 int main() {
     return 0;
 }
