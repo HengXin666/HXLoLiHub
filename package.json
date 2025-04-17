@@ -41,7 +41,8 @@
     "remark": "^15.0.1",
     "remark-github-alerts": "^0.1.1",
     "remark-math": "^6.0.0",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.0.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.7.0",

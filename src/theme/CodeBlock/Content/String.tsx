@@ -1,5 +1,6 @@
 import React, { type ReactNode } from 'react';
 import { useState, useEffect, useCallback, useRef, useContext, createContext } from 'react';
+import { useLocation } from "react-router-dom";
 import clsx from 'clsx';
 import { useThemeConfig, usePrismTheme } from '@docusaurus/theme-common';
 import {
@@ -15,6 +16,10 @@ import CopyButton from '@theme/CodeBlock/CopyButton';
 import WordWrapButton from '@theme/CodeBlock/WordWrapButton';
 import Container from '@theme/CodeBlock/Container';
 import type { Props } from '@theme/CodeBlock/Content/String';
+
+// 响应式全局变量
+import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
 
 // 选项卡
 import Tabs from '@theme/Tabs';
@@ -379,7 +384,66 @@ interface GroupedCodeBlocks {
     [groupName: string]: { data: SimpleCodeBlockType, uesTitle: string }[];
 }
 
-let GroupedBlocks: GroupedCodeBlocks = {};  // 普通变量
+type Store = {
+    groupedBlocks: GroupedCodeBlocks;
+    setGroupedBlocks: (newState: GroupedCodeBlocks) => void;
+    addCodeBlock: (
+        groupName: string,
+        item: { data: SimpleCodeBlockType; uesTitle: string }
+    ) => void;
+};
+
+function _addCodeBlock (
+    groupedBlocks: GroupedCodeBlocks,
+    key: string,
+    item: { data: SimpleCodeBlockType, uesTitle: string }
+) {
+    if (groupedBlocks[key] === undefined) {
+        groupedBlocks[key] = [];
+        groupedBlocks[key].push(item);
+        return;
+    }
+    const alreadyExists = groupedBlocks[key].some(it => it.uesTitle === item.uesTitle);
+
+    if (!alreadyExists) {
+        groupedBlocks[key].push(item);
+    }
+}
+
+// let GroupedBlocks: GroupedCodeBlocks = {};  // 普通变量
+let maeLocation: string = '';
+
+const useStore = create<Store>()(
+    immer((set) => ({
+        groupedBlocks: {},
+        setGroupedBlocks: (newState) => set(() => ({ groupedBlocks: newState })),
+        addCodeBlock: (groupName, item) =>
+            set((state) => {
+                if (state.groupedBlocks[groupName] === undefined) {
+                    state.groupedBlocks[groupName] = [];
+                    state.groupedBlocks[groupName].push(item);
+                    return;
+                }
+                const alreadyExists = state.groupedBlocks[groupName].some(it => it.uesTitle === item.uesTitle);
+            
+                if (!alreadyExists) {
+                    state.groupedBlocks[groupName].push(item);
+                }
+            }),
+    }))
+);
+
+function initComponent () {
+    const location = useLocation();
+    const groupedBlocks = useStore(state => state.groupedBlocks);
+    const setGroupedBlocks = useStore((state) => state.setGroupedBlocks);
+    const addCodeBlock = useStore(state => state.addCodeBlock);
+    if (maeLocation != location.pathname) {
+        setGroupedBlocks({}); // 清空缓存
+        maeLocation = location.pathname; // 记录当前 path
+    }
+    return { groupedBlocks, addCodeBlock };
+}
 
 function makeTestCodeBlock () {
 
@@ -393,50 +457,43 @@ export default function CodeBlockString ({
     showLineNumbers: showLineNumbersProp,
     language: languageProp,
 }: Props): ReactNode {
+    const { groupedBlocks, addCodeBlock } = initComponent();
+
     // 获取语言
     const fkPrefixLanguage: string = blockClassName.length ? blockClassName.split("-")[1] : '';
 
     // 解析 metastring 判断是否包含 [groupX-语言] 格式
-    const match = metastring?.match(/\[group(\d+)-(\w+)\]/); // 提取 group1, Python 等
+    const match = metastring?.match(/\[(.+)-(\w+)\]/); // 提取 group1, Python 等
     if (match) {
-        const groupedBlocks = GroupedBlocks;
-
         const groupName: string = match[1]; // group1
-        const languageName = match[2]; // Python, C++ 等
+        const titleName = match[2]; // Python, C++ 等
 
-        metastring = languageName;
+        metastring = titleName;
 
         let len: number = groupedBlocks[groupName]?.length || 0;
-        
-        if (!groupedBlocks[groupName]) {
-            groupedBlocks[groupName] = [];  // 如果没有，初始化为一个空数组
-        }
 
-        useEffect(() => {
-            groupedBlocks[groupName].push({
-                data: {
-                    children,
-                    className: blockClassName || '',
-                    metastring,
-                    title: titleProp,
-                    showLineNumbers: showLineNumbersProp,
-                    language: languageProp,
-                    fkPrefixLanguage
-                },
-                uesTitle: languageName
-            });
-        }, []);
+        addCodeBlock(groupName, {
+            data: {
+                children,
+                className: blockClassName || '',
+                metastring,
+                title: titleProp,
+                showLineNumbers: showLineNumbersProp,
+                language: languageProp,
+                fkPrefixLanguage
+            },
+            uesTitle: titleName
+        });
+        console.log(groupedBlocks);
 
         // 到时候记忆一下, 分组的第一个语言, 即可! (手动给他们自增一下, 不是第一个的返回<>)
 
-        return (
+        return groupedBlocks[groupName] ? (
             <Tabs>
-                {groupedBlocks[groupName] ? <TabItem value='1'></TabItem> : <></>}
                 {groupedBlocks[groupName].map((item, index) => {
-                    console.log(item, index);
                     return (
-                        <TabItem value={item.uesTitle}>
-                            <MakeSimpleCodeBlock 
+                        <TabItem value={item.uesTitle} default>
+                            <MakeSimpleCodeBlock
                                 children={item.data.children}
                                 className={item.data.className}
                                 metastring={item.data.metastring}
@@ -449,7 +506,7 @@ export default function CodeBlockString ({
                     )
                 })}
             </Tabs>
-        );
+        ) : (<></>);
     }
 
     // 为我们自定义的结构 (VsCode 渲染)

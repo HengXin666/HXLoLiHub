@@ -19,7 +19,7 @@ console.log('你好力扣')
 print('你好力扣')
 ```
 
-```ruby [group2-Ruby]
+```ruby [group1-Ruby]
 puts '你好力扣'
 ```
 
