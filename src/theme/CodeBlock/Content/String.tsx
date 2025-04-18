@@ -32,7 +32,6 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 import { FaCheck, FaUndo, FaCopy } from 'react-icons/fa'; // 引入勾选、还原、复制图标
 import type * as Monaco from 'monaco-editor'; // 仅引入类型
 
-import monacoThemes from './OneDark-Pro.json';
 import styles from './styles.module.css';
 
 import './leetcode.css';
@@ -274,7 +273,12 @@ function makeVsCodeCodeBlock ({
         // 创建主题
         loader.init().then((monaco: any) => {
             try {
-                monaco.editor.defineTheme('one-dark-pro', monacoThemes as Monaco.editor.IStandaloneThemeData);
+                fetch('/monaco/OneDark-Pro.json')
+                    .then(response => response.json()
+                        .then(monacoThemes => monaco.editor
+                            .defineTheme('one-dark-pro', monacoThemes as Monaco.editor.IStandaloneThemeData)))
+                        .catch(err => console.error('response.json() Error:', err))
+                    .catch(err => console.error('fetch Error:', err));
             } catch (error) {
                 console.error('Error defining theme:', error);
             }
@@ -451,6 +455,8 @@ function makeVsCodeCodeBlock ({
                                     hideCursorInOverviewRuler: true,
                                     overviewRulerBorder: false,
                                     cursorBlinking: 'smooth',    // 光标样式
+                                    links: true, // 可以点击链接
+                                    codeLens: true,
                                 }}
                                 width='auto'
                                 height={editorHeight}
