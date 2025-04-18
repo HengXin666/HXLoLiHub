@@ -1,5 +1,5 @@
 import React, { type ReactNode } from 'react';
-import { useState, useEffect, useCallback, useRef, useContext, createContext } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from "react-router-dom";
 import clsx from 'clsx';
 import { useThemeConfig, usePrismTheme } from '@docusaurus/theme-common';
@@ -29,12 +29,11 @@ import TabItem from '@theme/TabItem';
 import Mermaid from '@theme/Mermaid';
 
 import BrowserOnly from '@docusaurus/BrowserOnly';
-import { FaCheck } from 'react-icons/fa'; // 引入勾选图标
+import { FaCheck, FaUndo, FaCopy } from 'react-icons/fa'; // 引入勾选、还原、复制图标
 import type * as Monaco from 'monaco-editor'; // 仅引入类型
 
 import monacoThemes from './OneDark-Pro.json';
 import styles from './styles.module.css';
-import OneDarkPro from '../../../css/prism-one-dark-darker.css';
 
 import './leetcode.css';
 
@@ -358,97 +357,107 @@ function makeVsCodeCodeBlock ({
 
     return (
         <div style={{
-            width: '100%', height: 'auto', overflow: 'hidden',
+            width: '100%', height: 'auto',
             marginTop: '20px', marginBottom: '20px'
         }}>
-            <div style={{ marginBottom: '10px', display: 'flex', gap: '10px', justifyContent: 'right' }}>
-                <button
-                    onClick={handleReset}
-                    style={{
-                        padding: '5px 10px',
-                        fontSize: '14px',
-                        backgroundColor: isSelected ? '#4CAF50' : '#990099', // 勾选后背景色变化
-                        color: 'white',
-                        borderRadius: '5px',
-                        border: 'none',
-                        cursor: 'pointer',
-                        position: 'relative',
-                        transition: 'background-color 0.3s',
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}
+            <div className="leetcode_tabs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                {/* 左侧部分 */}
+                <div
+                    style={{ display: 'flex', alignItems: 'center' }}
+                    className='leetcode-vscode-title'
                 >
-                    {isSelected && (
-                        <FaCheck style={{
-                            marginRight: '5px',
-                            animation: 'checkmark 0.5s ease-in-out', // 动画效果
-                        }} />
-                    )}
-                    {'还原'}
-                </button>
-                <button
-                    onClick={copyToClipboard}
-                    style={{
-                        padding: '5px 10px',
-                        fontSize: '14px',
-                        backgroundColor: isSelectedCopy ? '#4CAF50' : '#990099', // 勾选后背景色变化
-                        color: 'white',
-                        borderRadius: '5px',
-                        border: 'none',
-                        cursor: 'pointer',
-                        position: 'relative',
-                        transition: 'background-color 0.3s',
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}
-                >
-                    {isSelectedCopy && (
-                        <FaCheck style={{
-                            marginRight: '5px',
-                            animation: 'checkmark 0.5s ease-in-out', // 动画效果
-                        }} />
-                    )}
                     {fkPrefixLanguage}
-                </button>
+                </div>
+
+                {/* 右侧按钮部分 */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    <button
+                        onClick={handleReset}
+                        className="leetcode_tabs tabs__item"
+                    >
+                        {isSelected && (
+                            <FaCheck
+                                style={{
+                                    marginRight: '5px',
+                                    animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                }}
+                            />
+                        )}
+                        {!isSelected && (
+                            <FaUndo
+                                style={{
+                                    marginRight: '5px',
+                                    animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                }}
+                            />
+                        )}
+                        {'还原'}
+                    </button>
+                    <button
+                        onClick={copyToClipboard}
+                        className="leetcode_tabs tabs__item"
+                    >
+                        {isSelectedCopy && (
+                            <FaCheck
+                                style={{
+                                    marginRight: '5px',
+                                    animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                }}
+                            />
+                        )}
+                        {!isSelectedCopy && (
+                            <FaCopy
+                                style={{
+                                    marginRight: '5px',
+                                    animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                }}
+                            />
+                        )}
+                        {'复制'}
+                    </button>
+                </div>
             </div>
             <BrowserOnly>
                 {() => {
                     const MonacoEditor = require('react-monaco-editor').default;
                     return (
-                        <MonacoEditor
-                            language={fkLanguageEscape}
-                            value={code}
-                            onChange={handleChange}
-                            editorWillMount={() => {
-                                handleChange(children); // 更新高度
-                            }}
-                            options={{
-                                minimap: { enabled: false },
-                                theme: 'one-dark-pro',
-                                automaticLayout: false,
-                                language: fkLanguageEscape,
-                                padding: { top: 10, bottom: 20 },
-                                lineNumbersMinChars: 3,
-                                scrollbar: {
-                                    vertical: 'hidden', // 隐藏垂直滚动条
-                                    alwaysConsumeMouseWheel: true, // 禁用鼠标滚轮滚动
-                                    handleMouseWheel: false, // 禁用编辑器内的鼠标滚轮事件
-                                },
-                                scrollBeyondLastLine: false, // 禁止滚动到最后一行之后
-                                mouseWheelZoom: false, // 禁用鼠标滚轮缩放
-                                renderFinalNewline: 'dimmed', // 是否显示最后一行的行号
-                                cursorSurroundingLines: 0, // 初始化时禁用辅助行
-                                cursorSurroundingLinesStyle: 'default',
-                                overviewRulerLanes: 0,
-                                fixedOverflowWidgets: true,
-                                hideCursorInOverviewRuler: true,
-                                overviewRulerBorder: false,
-                                cursorBlinking: 'smooth',    // 光标样式
-                            }}
-                            width="100%"
-                            height={editorHeight}
-                            editorDidMount={handleEditorDidMount}
-                        />)
+                        <div className='leetcode-tabs-content'>
+                            <MonacoEditor
+                                language={fkLanguageEscape}
+                                value={code}
+                                onChange={handleChange}
+                                editorWillMount={() => {
+                                    handleChange(children); // 更新高度
+                                }}
+                                options={{
+                                    minimap: { enabled: false },
+                                    theme: 'one-dark-pro',
+                                    automaticLayout: true,
+                                    language: fkLanguageEscape,
+                                    padding: { top: 10, bottom: 20 },
+                                    lineNumbersMinChars: 3,
+                                    scrollbar: {
+                                        vertical: 'hidden', // 隐藏垂直滚动条
+                                        alwaysConsumeMouseWheel: true, // 禁用鼠标滚轮滚动
+                                        handleMouseWheel: false, // 禁用编辑器内的鼠标滚轮事件
+                                    },
+                                    scrollBeyondLastLine: false, // 禁止滚动到最后一行之后
+                                    mouseWheelZoom: false, // 禁用鼠标滚轮缩放
+                                    renderFinalNewline: 'dimmed', // 是否显示最后一行的行号
+                                    cursorSurroundingLines: 0, // 初始化时禁用辅助行
+                                    cursorSurroundingLinesStyle: 'default',
+                                    overviewRulerLanes: 0,
+                                    fixedOverflowWidgets: true,
+                                    hideCursorInOverviewRuler: true,
+                                    overviewRulerBorder: false,
+                                    cursorBlinking: 'smooth',    // 光标样式
+                                }}
+                                width='auto'
+                                height={editorHeight}
+                                editorDidMount={handleEditorDidMount}
+                            />
+                        </div>
+                    )
                 }}
             </BrowserOnly>
         </div>

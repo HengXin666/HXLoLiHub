@@ -50,6 +50,7 @@ $ GIT_USER=<您的 GitHub 用户名>yarn deploy
     - 并且基于此, 二次开发, 添加了 [monaco-editor](https://github.com/microsoft/monaco-editor), 让一些代码块可编辑.
     - 并且添加了 [OneDark-Pro](https://github.com/Binaryify/OneDark-Pro) 主题
     - 特别的, 该组件为客户端渲染!
+    - @todo: 应该学习[主题升级](https://www.cnblogs.com/wanglinmantan/p/15345204.html), 使其更加贴切vscode!
 
 - [添加Remark Github Alert插件](https://jdocs.wiki/docusaurus-site/plugins/plugins-remarkjs-github-alerts)
     - 基于[remark-github-alerts](https://github.com/hyoban/remark-github-alerts)

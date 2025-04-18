@@ -14,6 +14,7 @@ const config: Config = {
   // 站点的URL, GitHub Pages 一般需要设置为项目的路径
   url: "https://HengXin666.github.io", // GitHub Pages 地址
   baseUrl: "/HXLoLiHub/", // 基础路径
+  trailingSlash: false,
 
   // GitHub Pages 部署配置, 修改为你的 GitHub 项目名称
   organizationName: "HengXin666", // GitHub 用户名或组织名

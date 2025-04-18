@@ -43,8 +43,8 @@
   content: "";
   position: absolute;
   right: 0px;
-  top: 14px;
-  bottom: 14px;
+  top: 12px;
+  bottom: 12px;
   width: 2px;
   background-color: #656567;
 }
@@ -54,10 +54,26 @@
   content: none;
 }
 
-/* ==== */
+/* === 下方矩形, 左右下带圆角 === */
 
 /* 删除多余的上边距，确保代码块紧贴顶部 */
 .leetcode-tabs-content {
   background-color: #3C3C3C; /* 设置背景色 */
   padding: 8px; /* 为代码块添加内边距 */
+  border-bottom-left-radius: 6.4px;
+  border-bottom-right-radius: 6.4px;
+}
+
+/* === 被选择的组合代码块的标题 (此处仅为vscode作为语言标题) === */
+
+.leetcode-vscode-title {
+  color: #ffffff;
+  padding: 8px 12px;
+  cursor: pointer;
+  margin-right: 0;
+  position: relative;
+  font-family: Menlo, sans-serif;
+  font-size: 14px;
+  text-decoration: none; /* 去除下划线 */
+  border: none; /* 去除任何边框 */
 }
