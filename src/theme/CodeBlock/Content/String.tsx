@@ -31,6 +31,7 @@ import type * as Monaco from 'monaco-editor'; // 仅引入类型
 
 import monacoThemes from './OneDark-Pro.json';
 import styles from './styles.module.css';
+import OneDarkPro from '../../../css/prism-one-dark-darker.css';
 
 import './leetcode.css';
 
@@ -116,7 +117,7 @@ function MakeSimpleCodeBlock (
         magicComments,
     });
 
-    return blockClassName === 'leetcode'
+    return metastring === 'leetcode'
         ? (
             <Container
                 as="div"
@@ -128,7 +129,6 @@ function MakeSimpleCodeBlock (
                 )}
             >
                 {title && <div className={styles.codeBlockTitle}>{title}</div>}
-                {/* 这里有内鬼 */}
                 <div 
                     className={clsx(styles.codeBlockContent, 'leetcode-tabs-content')}
                     style={{borderTopLeftRadius: '0px', borderTopRightRadius: '0px'}}
@@ -462,6 +462,7 @@ type Store = {
 // 记录上一次的url, 如果url不同, 那么就初始化 useStore
 let maeLocation: string = '';
 
+// 全局的响应式的变量
 const useStore = create<Store>()(
     immer((set) => ({
         groupedBlocks: {},
@@ -484,6 +485,10 @@ const useStore = create<Store>()(
     }))
 );
 
+/**
+ * 初始化页面, 如果url更新了, 那么会初始化`groupedBlocks`变量
+ * @returns 
+ */
 function initComponent () {
     const location = useLocation();
     const groupedBlocks = useStore(state => state.groupedBlocks);
@@ -496,6 +501,14 @@ function initComponent () {
     return { groupedBlocks, addCodeBlock };
 }
 
+/**
+ * 创建一个组合代码块 (力扣同款)
+ * @param param0 
+ * @param fkPrefixLanguage 
+ * @param groupName 
+ * @param titleName 
+ * @returns 
+ */
 function makeTabsCodeBlock ({
     children,
     className: blockClassName = '',
@@ -509,14 +522,13 @@ function makeTabsCodeBlock ({
     titleName: string
 ) {
     const { groupedBlocks, addCodeBlock } = initComponent();
-    metastring = '';
 
     addCodeBlock(groupName, {
         data: {
             props: {
                 children,
-                className: 'leetcode',
-                metastring,
+                className: blockClassName = '',
+                metastring: 'leetcode',
                 title: titleProp,
                 showLineNumbers: showLineNumbersProp,
                 language: languageProp
@@ -556,14 +568,14 @@ export default function CodeBlockString ({
     showLineNumbers: showLineNumbersProp,
     language: languageProp,
 }: Props): ReactNode {
-    const { groupedBlocks, addCodeBlock } = initComponent();
+    initComponent(); // 保证初始化页面
 
     // 获取语言
     const fkPrefixLanguage: string = blockClassName.length ? blockClassName.split("-")[1] : '';
 
     // 解析 metastring 判断是否包含 [组名-标题] 格式
     // 特别的, 它不会被渲染为 vscode 样式, 因为没有必要.
-    const match = metastring?.match(/\[(.+)-(\w+)\]/); // 提取 组名, 标题
+    const match = metastring?.match(/\[(.+)-(.+)\]/); // 提取 组名, 标题
     if (match) {
         return makeTabsCodeBlock({
             children,
@@ -571,7 +583,7 @@ export default function CodeBlockString ({
             metastring,
             title: titleProp,
             showLineNumbers: showLineNumbersProp,
-            language: languageProp,
+            language: fkPrefixLanguage,
         }, fkPrefixLanguage, match[1], match[2]);
     }
 
@@ -592,7 +604,7 @@ export default function CodeBlockString ({
     // 默认代码块
     return MakeSimpleCodeBlock({
         children,
-        className: blockClassName = '',
+        className: blockClassName,
         metastring,
         title: titleProp,
         showLineNumbers: showLineNumbersProp,

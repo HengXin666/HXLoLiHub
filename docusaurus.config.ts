@@ -9,7 +9,7 @@ import rehypeKatex from 'rehype-katex'; // katex渲染
 const config: Config = {
   title: "HXLoLiHub", // 项目名称
   tagline: "妹宅知识管理系统！", // 项目的 tagline（副标题）
-  favicon: "img/favicon.ico", // 项目图标，可以根据实际情况更换
+  favicon: "img/favicon.ico", // 项目图标, 可以根据实际情况更换
 
   // 站点的URL, GitHub Pages 一般需要设置为项目的路径
   url: "https://HengXin666.github.io", // GitHub Pages 地址
@@ -43,7 +43,7 @@ const config: Config = {
           sidebarPath: "./sidebars.ts", // 引入自定义的侧边栏配置文件
           remarkPlugins: [remarkGithubAlerts, remarkMath],
           rehypePlugins: [rehypeKatex],
-          editUrl: "https://github.com/HengXin666/HXLoLiHub/edit/main/", // 文档编辑链接，指向 GitHub 项目
+          editUrl: "https://github.com/HengXin666/HXLoLiHub/edit/main/", // 文档编辑链接, 指向 GitHub 项目
           showLastUpdateTime: true, // 显示最后编辑时间
         },
         blog: {
@@ -54,7 +54,7 @@ const config: Config = {
             type: ["rss", "atom"], // 支持的博客订阅格式
             xslt: true,
           },
-          editUrl: "https://github.com/HengXin666/HXLoLiHub/edit/main/", // 博客编辑链接，指向 GitHub 项目
+          editUrl: "https://github.com/HengXin666/HXLoLiHub/edit/main/", // 博客编辑链接, 指向 GitHub 项目
           showLastUpdateTime: true, // 显示最后编辑时间
         },
         pages: {
@@ -130,11 +130,31 @@ const config: Config = {
       copyright: `版权所有 © ${new Date().getFullYear()} HXLoLiHub, Inc. 由 Docusaurus 构建.<br>本站所有作品均采用CC BY-NC-ND 4.0许可协议.<br>未经允许, 禁止用于商业用途, 转载需注明出处.`, // 页脚版权信息
     },
     prism: {
-      theme: prismThemes.github, // 默认的代码高亮主题
-      darkTheme: prismThemes.dracula, // 深色模式下的代码高亮主题
-      // additionalLanguages: ['cpp'],
+      theme: prismThemes.oneDark,
+      // 它必须在 node_modules/prismjs/components 中
+      // 一般是 https://prismjs.com/#supported-languages 中的每一项的第一个
+      // 如: Markup - markup, html, xml, svg, mathml, ssml, atom, rss
+      // 它们都是 markup
+      additionalLanguages: [
+        // C++系列
+        'cpp', 'cmake', 'makefile',
+        // 前端系列
+        'markup', 'css', 'javascript', 'typescript', 'scss', 'sass', 'qml', 'jsx', 'tsx',
+        // 主流语言
+        'java', 'go', 'python', 'kotlin', 'lua', 'php', 'rust', 'csharp', 'ruby',
+        // 配置文件语言
+        'docker', 'ini', 'json', 'yaml',
+        // 其他
+        'sql', 'powershell', 'bash', 'markdown',
+      ],
     },
   } satisfies Preset.ThemeConfig,
+
+  // 支持渲染 Mermaid 图表, 但是我们自己渲染! 以支持兼容组合代码块
+  markdown: {
+    mermaid: false,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
 };
 
 export default config;

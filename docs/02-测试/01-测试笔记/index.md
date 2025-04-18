@@ -1,5 +1,15 @@
 # 测试使用的
 
+import Mermaid from '@theme/Mermaid';
+
+<Mermaid
+  value={`graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;`}
+/>
+
 ## 一、测试目录
 ### 1.1 测试子目录
 #### 1.1.1 测试子子目录
@@ -26,9 +36,56 @@ puts '你好力扣'
 ```
 
 ```cpp [分组1-cpp]
-int main() {
-    return 0;
-}
+class ServerAddInterceptorTestController {
+public:
+    struct Log {
+        decltype(std::chrono::steady_clock::now()) t;
+
+        bool before(HX::web::protocol::http::Request& req, HX::web::protocol::http::Response& res) {
+            HX::print::println("请求了: ", req.getPureRequesPath());
+            static_cast<void>(res);
+            t = std::chrono::steady_clock::now();
+            return true;
+        }
+
+        bool after(HX::web::protocol::http::Request& req, HX::web::protocol::http::Response& res) {
+            auto t1 = std::chrono::steady_clock::now();
+            auto dt = t1 - t;
+            int64_t us = std::chrono::duration_cast<std::chrono::milliseconds>(dt).count();
+            HX::print::println("已响应: ", req.getPureRequesPath(), "花费: ", us, " us");
+            static_cast<void>(res);
+            return true;
+        }
+    };
+
+    ROUTER
+        .on<GET, POST>("/", [](
+            Request& req,
+            Response& res
+        ) -> Task<> {
+            auto map = req.getParseQueryParameters();
+            if (map.find("loli") == map.end()) {
+                res.setResponseLine(Status::CODE_200)
+                .setContentType(HX::web::protocol::http::ResContentType::html)
+                .setBodyData("<h1>You is no good!</h1>");
+                co_return;
+            }
+            res.setResponseLine(Status::CODE_200)
+            .setContentType(HX::web::protocol::http::ResContentType::html)
+            .setBodyData("<h1>yo si yo si!</h1>");
+        }, Log{})
+        .on<GET, POST>("/home/{id}/**", [](
+            Request& req,
+            Response& res
+        ) -> Task<> {
+            static_cast<void>(req);
+            res.setResponseLine(Status::CODE_200)
+            .setContentType(HX::web::protocol::http::ResContentType::html)
+            .setBodyData("<h1>This is Home</h1>");
+            co_return;
+        })
+    ROUTER_END;
+};
 ```
 
 ```C vscode
@@ -38,8 +95,27 @@ int main() {
 ```
 
 ```cpp VsCode
+#include <HXWeb/HXApi.hpp> // 宏所在头文件
+#include <HXWeb/server/Server.h>
+
 int main() {
-    // 这个是交互式的!
+    chdir("../static");
+    setlocale(LC_ALL, "zh_CN.UTF-8");
+    ROUTER_BIND(WSChatController);
+    // 设置路由失败时候的端点
+    ROUTER_ERROR_ENDPOINT([] ENDPOINT {
+        static_cast<void>(req);
+        res.setResponseLine(HX::web::protocol::http::Status::CODE_404)
+           .setContentType(HX::web::protocol::http::ResContentType::html)
+           .setBodyData("<!DOCTYPE html><html><head><meta charset=UTF-8><title>404 Not Found</title><style>body{font-family:Arial,sans-serif;text-align:center;padding:50px;background-color:#f4f4f4}h1{font-size:100px;margin:0;color:#990099}p{font-size:24px;color:gold}</style><body><h1>404</h1><p>Not Found</p><hr/><p>HXLibs</p>");
+        co_return;
+    });
+
+    // 启动Http服务 [阻塞于此]
+    HX::web::server::Server::startHttp("127.0.0.1", "28205", 16 /*可选 线程数(互不相关)*/, 10s /*可选 超时时间*/);
+
+    // 或者, 启动Https服务 [阻塞于此], 需要提供证书和密钥
+    HX::web::server::Server::startHttps("127.0.0.1", "28205", "certs/cert.pem", "certs/key.pem");
     return 0;
 }
 ```
@@ -106,14 +182,26 @@ ABC`中文`
 > [!CAUTION]
 > Advises about risks or negative outcomes of certain actions.
 
-组合代码块
+```mermaid [组2-Mermaid图表]
+%%{init: { 'theme': 'neutral' } }%%
+timeline
+    title HXLoliHub 版本发布时间线 (乱写的)
+    2023-06-10 : 写下了第一行代码
+    2023-08-10 : 发布了 1.0 版本
+    2023-08-15 : 发布了 1.1 版本
+               : 支持了 katex 和 mermaid
+    2023-09-01 : 发布了 1.2 版本
+               : 一个完整的笔记软件基本成型
+```
 
-```javascript {1}
-console.log('你好力扣')
-```
-```python {1}
-print('你好力扣')
-```
-```ruby {3} 
-puts '你好力扣'
+```mermaid [组2-Mermaid图表]
+%%{init: { 'theme': 'neutral' } }%%
+timeline
+    title HXLoliHub 版本发布时间线 (乱写的)
+    2023-06-10 : 写下了第一行代码
+    2023-08-10 : 发布了 1.0 版本
+    2023-08-15 : 发布了 1.1 版本
+               : 支持了 katex 和 mermaid
+    2023-09-01 : 发布了 1.2 版本
+               : 一个完整的笔记软件基本成型
 ```
