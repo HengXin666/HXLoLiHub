@@ -51,9 +51,11 @@ $ GIT_USER=<您的 GitHub 用户名>yarn deploy
     - 并且添加了 [OneDark-Pro](https://github.com/Binaryify/OneDark-Pro) 主题
     - 特别的, 该组件为客户端渲染!
 
-- [添加Remark Github Alert插件](https://jdocs.wiki/docusaurus-site/plugins/plugins-remarkjs-github-alerts): [remark-github-alerts](https://github.com/hyoban/remark-github-alerts)
+- [添加Remark Github Alert插件](https://jdocs.wiki/docusaurus-site/plugins/plugins-remarkjs-github-alerts)
+    - 基于[remark-github-alerts](https://github.com/hyoban/remark-github-alerts)
 
 - [数学渲染 KaTeX](https://docusaurus.nodejs.cn/docs/markdown-features/math-equations)
+    - 原项目与依赖样式: [KaTeX](https://github.com/KaTeX/KaTeX)
 
 - [图片单击放大](https://github.com/flexanalytics/plugin-image-zoom)
 

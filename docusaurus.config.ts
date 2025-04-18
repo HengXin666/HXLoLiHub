@@ -63,20 +63,14 @@ const config: Config = {
           showLastUpdateTime: true, // 显示最后编辑时间
         },
         theme: {
-          customCss: "./src/css/custom.css", // 可以放置自定义的 CSS 样式
+          // 可以放置自定义的 CSS 样式
+          customCss: [
+            "./src/css/custom.css",
+            "./static/katex/katex.css",
+          ],
         },
       } satisfies Preset.Options,
     ],
-  ],
-  stylesheets: [
-    // 数学公式所需样式
-    {
-      href: "https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css",
-      type: "text/css",
-      integrity:
-        "sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM",
-      crossorigin: "anonymous",
-    },
   ],
 
   themeConfig: {
