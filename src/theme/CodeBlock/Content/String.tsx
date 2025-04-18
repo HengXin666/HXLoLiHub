@@ -25,6 +25,9 @@ import { immer } from 'zustand/middleware/immer';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+// 图表
+import Mermaid from '@theme/Mermaid';
+
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { FaCheck } from 'react-icons/fa'; // 引入勾选图标
 import type * as Monaco from 'monaco-editor'; // 仅引入类型
@@ -91,6 +94,17 @@ function MakeSimpleCodeBlock (
         fkPrefixLanguage,
     } = props;
 
+    // 如果是图表, 则渲染图表
+    if (fkPrefixLanguage.toLowerCase() === 'mermaid') {
+        return metastring === 'leetcode'
+            ? (
+                <div className='leetcode-tabs-content'>
+                    <Mermaid value={children} />
+                </div>
+            )
+            : (<Mermaid value={children} />);
+    }
+
     const {
         prism: { defaultLanguage, magicComments },
     } = useThemeConfig();
@@ -129,9 +143,9 @@ function MakeSimpleCodeBlock (
                 )}
             >
                 {title && <div className={styles.codeBlockTitle}>{title}</div>}
-                <div 
+                <div
                     className={clsx(styles.codeBlockContent, 'leetcode-tabs-content')}
-                    style={{borderTopLeftRadius: '0px', borderTopRightRadius: '0px'}}
+                    style={{ borderTopLeftRadius: '0px', borderTopRightRadius: '0px' }}
                 >
                     <Highlight
                         theme={prismTheme}
@@ -539,6 +553,8 @@ function makeTabsCodeBlock ({
     });
 
     // 到时候记忆一下, 分组的第一个语言, 即可! (不是第一个的返回<>)
+    // 值得注意的是, 不能存在相同的`titleName`, 尤其是第一个, 不然会生成多个 <Tabs>
+    // 而原本就应该不能有相同的选项卡文本, 不然也不方便区分! 所以这个不是bug, 是有意的, ub!
     return groupedBlocks[groupName] && groupedBlocks[groupName].head === titleName ? (
         <div className="leetcode_tabs_block">
             <Tabs className="leetcode_tabs">
@@ -546,7 +562,8 @@ function makeTabsCodeBlock ({
                     // 这里抽风了, 如果你的编译器报错, 请忽略
                     return (
                         <TabItem
-                            value={item.uesTitle}
+                            value={`${index}`}
+                            label={item.uesTitle}
                         >
                             <MakeSimpleCodeBlock
                                 {...item.data.props} // 得这样传递, 多个参数真难搞

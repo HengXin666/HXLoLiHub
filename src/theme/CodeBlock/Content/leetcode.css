@@ -46,27 +46,12 @@
   top: 14px;
   bottom: 14px;
   width: 2px;
-  background-color: #555;
+  background-color: #656567;
 }
 
 /* 去掉最后一个选项卡的分隔线 */
 .leetcode_tabs .tabs__item:last-child::after {
   content: none;
-}
-
-/* 面板样式 */
-/* 只修改 Tabs 内容区域的背景色 */
-.leetcode_tabs .tabs__panel {
-  background-color: #303030; /* 设置背景色为 #3C3C3C */
-  padding: 16px;
-  border: 1px solid #ddd;
-  display: none;
-  transition: opacity 0.3s ease;
-}
-
-/* 选中的 Panel */
-.leetcode_tabs .tabs__panel--active {
-  display: block;
 }
 
 /* ==== */

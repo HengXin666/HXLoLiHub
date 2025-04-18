@@ -88,6 +88,49 @@ public:
 };
 ```
 
+```cpp [g1-cpp]
+int mian() {
+
+}
+```
+
+```cpp [g1-c++]
+[]{}();
+```
+
+```Mermaid [g2-Mermaid图表1]
+timeline
+    title HXLoliHub 版本发布时间线 (乱写的)
+    2023-06-10 : 写下了第一行代码
+    2023-08-10 : 发布了 1.0 版本
+    2023-08-15 : 发布了 1.1 版本
+               : 支持了 katex 和 mermaid
+    2023-09-01 : 发布了 1.2 版本
+               : 一个完整的笔记软件基本成型
+```
+
+```Mermaid [g2-Mermaid图表2]
+timeline
+    title HXLoliHub 版本发布时间线 (乱写的)
+    2023-06-10 : 写下了第一行代码
+    2023-08-10 : 发布了 1.0 版本
+    2023-08-15 : 发布了 1.1 版本
+               : 支持了 katex 和 mermaid
+    2023-09-01 : 发布了 1.2 版本
+               : 一个完整的笔记软件基本成型
+```
+
+```Mermaid [g2-Mermaid图表3]
+timeline
+    title HXLoliHub 版本发布时间线 (乱写的)
+    2023-06-10 : 写下了第一行代码
+    2023-08-10 : 发布了 1.0 版本
+    2023-08-15 : 发布了 1.1 版本
+               : 支持了 katex 和 mermaid
+    2023-09-01 : 发布了 1.2 版本
+               : 一个完整的笔记软件基本成型
+```
+
 ```C vscode
 int main() {
     // 这个是交互式的!
@@ -181,27 +224,3 @@ ABC`中文`
 
 > [!CAUTION]
 > Advises about risks or negative outcomes of certain actions.
-
-```mermaid [组2-Mermaid图表]
-%%{init: { 'theme': 'neutral' } }%%
-timeline
-    title HXLoliHub 版本发布时间线 (乱写的)
-    2023-06-10 : 写下了第一行代码
-    2023-08-10 : 发布了 1.0 版本
-    2023-08-15 : 发布了 1.1 版本
-               : 支持了 katex 和 mermaid
-    2023-09-01 : 发布了 1.2 版本
-               : 一个完整的笔记软件基本成型
-```
-
-```mermaid [组2-Mermaid图表]
-%%{init: { 'theme': 'neutral' } }%%
-timeline
-    title HXLoliHub 版本发布时间线 (乱写的)
-    2023-06-10 : 写下了第一行代码
-    2023-08-10 : 发布了 1.0 版本
-    2023-08-15 : 发布了 1.1 版本
-               : 支持了 katex 和 mermaid
-    2023-09-01 : 发布了 1.2 版本
-               : 一个完整的笔记软件基本成型
-```
