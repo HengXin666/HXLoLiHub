@@ -7,11 +7,9 @@
 /* 包裹 Markdown 内容的区域 */
 .theme-doc-markdown .markdown {
   box-sizing: border-box;
-  padding: 32px;
-  max-width: 960px;
   margin: 0 auto;
-  background-color: var(--markdown-light-bg);
-  color: var(--markdown-light-text);
+  background-color: var(--markdown-dark-bg);
+  color: var(--markdown-dark-text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
@@ -39,8 +37,7 @@ html[data-theme='dark'] .theme-doc-markdown .markdown {
 .theme-doc-markdown .markdown p,
 .theme-doc-markdown .markdown ul,
 .theme-doc-markdown .markdown ol,
-.theme-doc-markdown .markdown blockquote,
-.theme-doc-markdown .markdown table {
+.theme-doc-markdown .markdown blockquote {
   color: inherit;
 }
 
@@ -49,9 +46,8 @@ html[data-theme='dark'] .theme-doc-markdown .markdown {
 /* 限定在文档内容区域 */
 .theme-doc-markdown img {
   display: block;
-  margin: 1rem auto;
+  margin: 0rem auto;
   height: auto;
-  border-radius: 8px;
   transition: transform 0.3s ease;
 }
 
@@ -60,31 +56,11 @@ html[data-theme='dark'] .theme-doc-markdown .markdown {
   transform: scale(1.02);
 }
 
-/* 表格居中 */
-.theme-doc-markdown table {
-  margin: 1rem auto;
-  border-collapse: collapse;
-}
-
 /* ===== 表格居中 ===== */
-
-.theme-doc-markdown .markdown table {
-  margin: 1.5em auto;
-  border-collapse: collapse;
-  width: 90%; /* 自动调整宽度 */
-}
-
-/* 表格单元格的样式 */
-.theme-doc-markdown .markdown table th,
-.theme-doc-markdown .markdown table td {
-  border: 1px solid #d0d7de;
-  padding: 6px 13px;
-}
-
-/* 深色模式下表格的边框颜色 */
-html[data-theme='dark'] .theme-doc-markdown .markdown table th,
-html[data-theme='dark'] .theme-doc-markdown .markdown table td {
-  border: 1px solid #30363d;
+.theme-doc-markdown table {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* ===== 修复 Docusaurus 额外的 Padding ===== */

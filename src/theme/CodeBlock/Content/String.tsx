@@ -10,7 +10,7 @@ import {
     containsLineNumbers,
     useCodeWordWrap,
 } from '@docusaurus/theme-common/internal';
-import { Highlight, type Language } from 'prism-react-renderer';
+import { Highlight, themes, type Language } from 'prism-react-renderer';
 import Line from '@theme/CodeBlock/Line';
 import CopyButton from '@theme/CodeBlock/CopyButton';
 import WordWrapButton from '@theme/CodeBlock/WordWrapButton';
@@ -33,8 +33,10 @@ import { FaCheck, FaUndo, FaCopy } from 'react-icons/fa'; // 引入勾选、还�
 import type * as Monaco from 'monaco-editor'; // 仅引入类型
 
 import styles from './styles.module.css';
+import OneDarkPro from './OneDark-Pro.json';
 
 import './leetcode.css';
+import config from '@generated/docusaurus.config';
 
 function languageEscape (language: string | undefined): string | undefined {
     language = language?.toLowerCase();
@@ -270,19 +272,7 @@ function makeVsCodeCodeBlock ({
     const { loader } = require('@monaco-editor/react');
 
     useEffect(() => {
-        // 创建主题
-        loader.init().then((monaco: any) => {
-            try {
-                fetch('/monaco/OneDark-Pro.json')
-                    .then(response => response.json()
-                        .then(monacoThemes => monaco.editor
-                            .defineTheme('one-dark-pro', monacoThemes as Monaco.editor.IStandaloneThemeData)))
-                        .catch(err => console.error('response.json() Error:', err))
-                    .catch(err => console.error('fetch Error:', err));
-            } catch (error) {
-                console.error('Error defining theme:', error);
-            }
-        });
+        
     }, []);
 
     // Monaco 的初始化设置
@@ -345,10 +335,10 @@ function makeVsCodeCodeBlock ({
     useEffect(() => {
         loader.init().then((monaco: any) => {
             monacoRef.current = monaco;
-            monaco.editor.setTheme('one-dark-pro');
+            monacoRef.current.editor.setTheme('hx-one-dark-pro');
 
             import(`monaco-editor/esm/vs/basic-languages/${fkLanguageEscape}/${fkLanguageEscape}`)
-                .catch(() => { });
+                .catch(() => { console.error(); });
         });
 
         monaco.editor.createModel(code, fkLanguageEscape);
@@ -435,8 +425,9 @@ function makeVsCodeCodeBlock ({
                                 }}
                                 options={{
                                     minimap: { enabled: false },
-                                    theme: 'one-dark-pro',
                                     automaticLayout: true,
+                                    // theme: 'hx-one-dark-pro',
+                                    theme: 'hx-one-dark-pro',
                                     language: fkLanguageEscape,
                                     padding: { top: 10, bottom: 20 },
                                     lineNumbersMinChars: 3,
@@ -526,6 +517,28 @@ function initComponent () {
     if (maeLocation != location.pathname) {
         setGroupedBlocks({}); // 清空缓存
         maeLocation = location.pathname; // 记录当前 path
+
+        const { loader } = require('@monaco-editor/react');
+
+        // 创建主题
+        loader.init().then((monaco: any) => {
+            try {
+                import('./OneDark-Pro.json')
+                    .then((response: any) => {
+                        console.log("res", response);
+                        response.json()
+                            .then((monacoThemes: any) => {
+                                const res =  monaco.editor
+                                    .defineTheme('hx-one-dark-pro', monacoThemes as Monaco.editor.IStandaloneThemeData);
+                                console.log("加载主题: one-dark-pro", monacoThemes, res);
+                            })
+                            .catch((err: any) => console.error('response.json() Error:', err));
+                    })
+                    .catch(err => console.error('fetch Error:', err));
+            } catch (error) {
+                console.error('Error defining theme:', error);
+            }
+        });
     }
     return { groupedBlocks, addCodeBlock };
 }

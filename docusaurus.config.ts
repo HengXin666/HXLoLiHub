@@ -31,7 +31,7 @@ const config: Config = {
 
   plugins: [
     "plugin-image-zoom", // 图片单击放大
-    "docusaurus-graph", // 文档关系图
+    // "docusaurus-graph", // 文档关系图
   ],
 
   // 使用 presets 配置
