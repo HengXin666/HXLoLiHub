@@ -1,8 +1,10 @@
 import React, { type ReactNode } from 'react';
 import type { Props } from '@theme/MDXComponents/Img';
 
-import { useHistory } from 'react-router-dom';
 import config from '@generated/docusaurus.config';
+
+import { FaEdit } from 'react-icons/fa'; // 引入勾选、还原、复制图标
+import './leetcode.css';
 
 /**
  * 提取宽度标记
@@ -10,7 +12,7 @@ import config from '@generated/docusaurus.config';
  * @returns 
  */
 function extractWidthFromAlt (altText?: string): string | undefined {
-    if (!altText) 
+    if (!altText)
         return undefined;
     const match = altText.match(/##[w|W](\d+)(%?)##/); // 匹配 ##w500## 或 ##w75%##
     if (match) {
@@ -25,7 +27,7 @@ function extractWidthFromAlt (altText?: string): string | undefined {
  * @returns 
  */
 function extractRadiusFromAlt (altText?: string): string | undefined {
-    if (!altText) 
+    if (!altText)
         return undefined;
     const match = altText.match(/##[r|R](\d+)##/); // 匹配 ##r5##
     if (match) {
@@ -59,11 +61,47 @@ export default function MDXImg (props: Props): ReactNode {
         );
     }
 
-    const history = useHistory();
-
     const handleButtonClick = (src: string) => {
-        history.push(`${config.baseUrl}drawio?src=${src}`);
+        window.open(`${config.baseUrl}drawio?src=${src}`, '_blank');
     };
 
-    return (<button onClick={() => handleButtonClick(src)}>按钮 {`${config.baseUrl}drawio?src=${src}`}</button>);
+    return (
+        <div style={{
+            width: '100%', height: 'auto',
+            marginTop: '20px', marginBottom: '20px'
+        }}>
+            <div className="leetcode_tabs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                {/* 左侧部分 */}
+                <div
+                    style={{ display: 'flex', alignItems: 'center' }}
+                    className='leetcode-vscode-title'
+                >
+                    draw.io
+                </div>
+
+                {/* 右侧按钮部分 */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    <button
+                        onClick={() => handleButtonClick(src)}
+                        className="leetcode_tabs tabs__item"
+                    >
+                        <FaEdit
+                            style={{
+                                marginRight: '5px',
+                                animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                            }}
+                        />
+                        编辑
+                    </button>
+                </div>
+            </div>
+            <div className='leetcode-tabs-content'>
+                <img
+                    decoding="async"
+                    loading="lazy"
+                    {...props}
+                />
+            </div>
+        </div>
+    );
 }
