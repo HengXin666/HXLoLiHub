@@ -99,9 +99,11 @@ function initComponent () {
     if (maeLocation != location.pathname) {
         setGroupedBlocks({}); // 清空缓存
         maeLocation = location.pathname; // 记录当前 path
-        isLoadedLanguage = {};
-        isLoadedThemeData = false;
-        isLoadedThemeDataed = false;
+
+        // 可以注释掉, 确保唯一加载, 跨页面有效
+        // isLoadedLanguage = {};
+        // isLoadedThemeData = false;
+        // isLoadedThemeDataed = false;
     }
     return { groupedBlocks, addCodeBlock };
 }

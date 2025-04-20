@@ -1,6 +1,9 @@
 import React, { type ReactNode } from 'react';
 import type { Props } from '@theme/MDXComponents/Img';
 
+import { useHistory } from 'react-router-dom';
+import config from '@generated/docusaurus.config';
+
 /**
  * 提取宽度标记
  * @param altText 
@@ -33,23 +36,34 @@ function extractRadiusFromAlt (altText?: string): string | undefined {
 
 export default function MDXImg (props: Props): ReactNode {
     const {
-        alt, // 获取到 ![alt]()
-        src, // 获取到 ![alt](src)
+        alt,      // 获取到 ![alt]()
+        src = '', // 获取到 ![alt](src)
     } = props;
 
-    const width = extractWidthFromAlt(alt);
-    const borderRadius = extractRadiusFromAlt(alt);
+    // 注意由于混淆, 它 .drawio.svg 会变为 `${hash()}.svg`
+    if (!src.endsWith('.drawio') && !src.endsWith('.svg')) {
+        const width = extractWidthFromAlt(alt);
+        const borderRadius = extractRadiusFromAlt(alt);
 
-    return (
-        // eslint-disable-next-line jsx-a11y/alt-text
-        <img
-            decoding="async"
-            loading="lazy"
-            {...props}
-            style={{
-                width: width ? width : 'auto',
-                borderRadius: borderRadius ? `${borderRadius}px` : 0,
-            }}
-        />
-    );
+        return (
+            // eslint-disable-next-line jsx-a11y/alt-text
+            <img
+                decoding="async"
+                loading="lazy"
+                {...props}
+                style={{
+                    width: width ? width : 'auto',
+                    borderRadius: borderRadius ? `${borderRadius}px` : 0,
+                }}
+            />
+        );
+    }
+
+    const history = useHistory();
+
+    const handleButtonClick = (src: string) => {
+        history.push(`${config.baseUrl}drawio?src=${src}`);
+    };
+
+    return (<button onClick={() => handleButtonClick(src)}>按钮 {`${config.baseUrl}drawio?src=${src}`}</button>);
 }
