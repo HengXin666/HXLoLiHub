@@ -54,7 +54,7 @@ export default function MDXImg (props: Props): ReactNode {
                 loading="lazy"
                 {...props}
                 style={{
-                    width: width ? width : 'auto',
+                    width: width || 'auto',
                     borderRadius: borderRadius ? `${borderRadius}px` : 0,
                 }}
             />
@@ -101,7 +101,7 @@ export default function MDXImg (props: Props): ReactNode {
                     loading="lazy"
                     {...props}
                     style={{
-                        width: width ? width : 'auto',
+                        width: width || 'auto',
                         borderRadius: borderRadius ? `${borderRadius}px` : 0,
                     }}
                 />

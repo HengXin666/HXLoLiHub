@@ -63,3 +63,6 @@ $ GIT_USER=<您的 GitHub 用户名>yarn deploy
 - [文档关系图](https://github.com/Arsero/docusaurus-graph)
 
 - [支持评论: 基于giscus](https://giscus.app/zh-CN) 依赖 [@giscus/react](https://www.npmjs.com/package/@giscus/react), 感谢 [用 Giscus 给 Docusaurus 博客增加评论区](https://zhuanlan.zhihu.com/p/717218474)、[Docusaurus 添加评论功能](https://www.alanwang.site/posts/blog-guides/docusaurus-comment) 的文章教学!
+
+> [!TIP]
+> giscus 本系统是基于`url`映射的, 请注意, 一旦定下文件名, 就不能调整了 (虽然title也是这样的...)
