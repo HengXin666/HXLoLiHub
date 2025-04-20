@@ -42,10 +42,11 @@ export default function MDXImg (props: Props): ReactNode {
         src = '', // 获取到 ![alt](src)
     } = props;
 
+    const width = extractWidthFromAlt(alt);
+    const borderRadius = extractRadiusFromAlt(alt);
+
     // 注意由于混淆, 它 .drawio.svg 会变为 `${hash()}.svg`
-    if (!src.endsWith('.drawio') && !src.endsWith('.svg')) {
-        const width = extractWidthFromAlt(alt);
-        const borderRadius = extractRadiusFromAlt(alt);
+    if (!src.endsWith('.svg')) {
 
         return (
             // eslint-disable-next-line jsx-a11y/alt-text
@@ -100,6 +101,10 @@ export default function MDXImg (props: Props): ReactNode {
                     decoding="async"
                     loading="lazy"
                     {...props}
+                    style={{
+                        width: width ? width : 'auto',
+                        borderRadius: borderRadius ? `${borderRadius}px` : 0,
+                    }}
                 />
             </div>
         </div>
