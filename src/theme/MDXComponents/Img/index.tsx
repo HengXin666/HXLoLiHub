@@ -47,7 +47,6 @@ export default function MDXImg (props: Props): ReactNode {
 
     // 注意由于混淆, 它 .drawio.svg 会变为 `${hash()}.svg`
     if (!src.endsWith('.svg')) {
-
         return (
             // eslint-disable-next-line jsx-a11y/alt-text
             <img

@@ -352,8 +352,6 @@ function makeVsCodeCodeBlock ({
     const [isSelected, setIsSelected] = useState(false); // 控制是否显示钩选图标(还原时候)
     const [tooltipVisible, setTooltipVisible] = useState(false); // 控制提示框显示
 
-    // const monacoRef = useRef<typeof monaco | null>(null);
-    // const editorInstanceRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
     const fkLanguageEscape = languageEscape(fkPrefixLanguage);
 
     // 复制到剪贴板函数

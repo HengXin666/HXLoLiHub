@@ -75,6 +75,17 @@ const config: Config = {
   ],
 
   themeConfig: {
+    // 评论设置
+    giscus: {
+      // 此处获取配置: https://giscus.app/zh-CN
+      repo: 'HengXin666/HXLoLiHub',
+      repoId: 'R_kgDOOY3jRQ',
+      category: 'General',
+      categoryId: 'DIC_kwDOOY3jRc4CpSQj',
+      // 颜色主题
+      theme: 'light_high_contrast',
+      darkTheme: 'dark_tritanopia'
+    },
     // 项目的社交卡片图像
     image: "img/docusaurus-social-card.jpg",
     navbar: {
