@@ -28,16 +28,89 @@ import TabItem from '@theme/TabItem';
 // 图表
 import Mermaid from '@theme/Mermaid';
 
+import dynamic from 'next/dynamic';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { FaCheck, FaUndo, FaCopy } from 'react-icons/fa'; // 引入勾选、还原、复制图标
 import type * as Monaco from 'monaco-editor'; // 仅引入类型
 
 import styles from './styles.module.css';
 import OneDarkPro from './OneDark-Pro.json';
-
 import './leetcode.css';
-import config from '@generated/docusaurus.config';
 
+// 仅客户端加载的`MonacoEditor`
+const MonacoEditor = dynamic(() => import('react-monaco-editor').then(mod => mod.default), { ssr: false }); 
+
+type SimpleCodeBlockType = { props: Props } & { fkPrefixLanguage: string };
+
+interface GroupedCodeBlocks {
+    [groupName: string]: {
+        head: string, // uesTitle
+        list: { data: SimpleCodeBlockType, uesTitle: string }[]
+    };
+}
+
+type Store = {
+    groupedBlocks: GroupedCodeBlocks;
+    setGroupedBlocks: (newState: GroupedCodeBlocks) => void;
+    addCodeBlock: (
+        groupName: string,
+        item: { data: SimpleCodeBlockType; uesTitle: string }
+    ) => void;
+};
+
+// 记录上一次的url, 如果url不同, 那么就初始化 useStore
+let maeLocation: string = '';
+let isLoadedLanguage: { [language: string]: boolean } = {};
+let isLoadedThemeData: boolean = false;
+let isLoadedThemeDataed: boolean = false;
+
+// 全局的响应式的变量
+const useStore = create<Store>()(
+    immer((set) => ({
+        groupedBlocks: {},
+        setGroupedBlocks: (newState) => set(() => ({ groupedBlocks: newState })),
+        addCodeBlock: (groupName, item) =>
+            set((state) => {
+                if (state.groupedBlocks[groupName] === undefined) {
+                    state.groupedBlocks[groupName] = {
+                        head: item.uesTitle,
+                        list: [item]
+                    };
+                    return;
+                }
+                const alreadyExists = state.groupedBlocks[groupName].list.some(it => it.uesTitle === item.uesTitle);
+
+                if (!alreadyExists) {
+                    state.groupedBlocks[groupName].list.push(item);
+                }
+            }),
+    }))
+);
+
+/**
+ * 初始化页面, 如果url更新了, 那么会初始化`groupedBlocks`变量
+ * @returns 
+ */
+function initComponent () {
+    const location = useLocation();
+    const groupedBlocks = useStore(state => state.groupedBlocks);
+    const setGroupedBlocks = useStore((state) => state.setGroupedBlocks);
+    const addCodeBlock = useStore(state => state.addCodeBlock);
+    if (maeLocation != location.pathname) {
+        setGroupedBlocks({}); // 清空缓存
+        maeLocation = location.pathname; // 记录当前 path
+        isLoadedLanguage = {};
+        isLoadedThemeData = false;
+        isLoadedThemeDataed = false;
+    }
+    return { groupedBlocks, addCodeBlock };
+}
+
+/**
+ * 处理语言映射 如: `c++ -> cpp`
+ * @param language 
+ * @returns 
+ */
 function languageEscape (language: string | undefined): string | undefined {
     language = language?.toLowerCase();
     switch (language) {
@@ -265,23 +338,21 @@ function makeVsCodeCodeBlock ({
 ) {
     /*
         import * as monaco from "monaco-editor";
+        import { loader } from '@monaco-editor/react';  // 没必要! 反而是会乱, bug的原因! 直接对 monaco 操作!
         import MonacoEditor from 'react-monaco-editor'; // VSCode 编辑器
-        import { loader } from '@monaco-editor/react';
     */
     const monaco = require('monaco-editor');
-    const { loader } = require('@monaco-editor/react');
 
-    useEffect(() => {
-        
-    }, []);
-
-    // Monaco 的初始化设置
     const [code, setCode] = useState<string>(children);
     const [editorHeight, setEditorHeight] = useState<number>(200); // 初始高度
 
     const [isSelectedCopy, setIsSelectedCopy] = useState(false); // 控制是否显示钩选图标(复制时候)
     const [isSelected, setIsSelected] = useState(false); // 控制是否显示钩选图标(还原时候)
     const [tooltipVisible, setTooltipVisible] = useState(false); // 控制提示框显示
+
+    const monacoRef = useRef<typeof monaco | null>(null);
+    const editorInstanceRef = useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
+    const fkLanguageEscape = languageEscape(fkPrefixLanguage);
 
     // 复制到剪贴板函数
     const copyToClipboard = () => {
@@ -315,7 +386,7 @@ function makeVsCodeCodeBlock ({
 
     // 初始化编辑器
     const handleEditorDidMount = (editor: Monaco.editor.IStandaloneCodeEditor) => {
-        editor.updateOptions({ renderLineHighlight: 'none' })
+        editor.updateOptions({ renderLineHighlight: 'none' });
 
         // 当前为焦点
         editor.onDidFocusEditorText(() => {
@@ -328,26 +399,31 @@ function makeVsCodeCodeBlock ({
         });
     };
 
-    const monacoRef = useRef<typeof monaco | null>(null);
-
-    const fkLanguageEscape = languageEscape(fkPrefixLanguage);
-
     useEffect(() => {
-        loader.init().then((monaco: any) => {
-            monacoRef.current = monaco;
-            monacoRef.current.editor.setTheme('hx-one-dark-pro');
+        if (!isLoadedThemeData) {
+            isLoadedThemeData = true;
+            try {
+                monaco.editor.defineTheme('hx-one-dark-pro', OneDarkPro as Monaco.editor.IStandaloneThemeData);
+                monaco.editor.setTheme('hx-one-dark-pro');
+                isLoadedThemeDataed = true;
+            } catch (err) {
+                console.error('加载主题失败!', err);
+            }
+        }
 
+        if (fkLanguageEscape && !isLoadedLanguage[fkLanguageEscape]) {
+            isLoadedLanguage[fkLanguageEscape] = true; // 标记语言已尝试加载
             import(`monaco-editor/esm/vs/basic-languages/${fkLanguageEscape}/${fkLanguageEscape}`)
-                .catch(() => { console.error(); });
-        });
-
-        monaco.editor.createModel(code, fkLanguageEscape);
+                .catch((err) => {
+                    console.error('Language file loading failed', err);
+                });
+        }
 
         return () => {
-            // 卸载 model 防止 memory leak
-            monacoRef.current?.editor.getModels().forEach((model: any) => model.dispose());
+            // 卸载所有模型 防止内存泄漏
+            monaco.editor.getModels().forEach((model: any) => model.dispose());
         };
-    }, [fkLanguageEscape]);
+    }, []);
 
     return (
         <div style={{
@@ -413,11 +489,11 @@ function makeVsCodeCodeBlock ({
             </div>
             <BrowserOnly>
                 {() => {
-                    const MonacoEditor = require('react-monaco-editor').default;
                     return (
                         <div className='leetcode-tabs-content'>
                             <MonacoEditor
                                 language={fkLanguageEscape}
+                                theme={isLoadedThemeDataed ? 'hx-one-dark-pro' : 'vs-dark'}
                                 value={code}
                                 onChange={handleChange}
                                 editorWillMount={() => {
@@ -426,8 +502,6 @@ function makeVsCodeCodeBlock ({
                                 options={{
                                     minimap: { enabled: false },
                                     automaticLayout: true,
-                                    // theme: 'hx-one-dark-pro',
-                                    theme: 'hx-one-dark-pro',
                                     language: fkLanguageEscape,
                                     padding: { top: 10, bottom: 20 },
                                     lineNumbersMinChars: 3,
@@ -459,88 +533,6 @@ function makeVsCodeCodeBlock ({
             </BrowserOnly>
         </div>
     );
-}
-
-type SimpleCodeBlockType = { props: Props } & { fkPrefixLanguage: string };
-
-interface GroupedCodeBlocks {
-    [groupName: string]: {
-        head: string, // uesTitle
-        list: { data: SimpleCodeBlockType, uesTitle: string }[]
-    };
-}
-
-type Store = {
-    groupedBlocks: GroupedCodeBlocks;
-    setGroupedBlocks: (newState: GroupedCodeBlocks) => void;
-    addCodeBlock: (
-        groupName: string,
-        item: { data: SimpleCodeBlockType; uesTitle: string }
-    ) => void;
-};
-
-// 记录上一次的url, 如果url不同, 那么就初始化 useStore
-let maeLocation: string = '';
-
-// 全局的响应式的变量
-const useStore = create<Store>()(
-    immer((set) => ({
-        groupedBlocks: {},
-        setGroupedBlocks: (newState) => set(() => ({ groupedBlocks: newState })),
-        addCodeBlock: (groupName, item) =>
-            set((state) => {
-                if (state.groupedBlocks[groupName] === undefined) {
-                    state.groupedBlocks[groupName] = {
-                        head: item.uesTitle,
-                        list: [item]
-                    };
-                    return;
-                }
-                const alreadyExists = state.groupedBlocks[groupName].list.some(it => it.uesTitle === item.uesTitle);
-
-                if (!alreadyExists) {
-                    state.groupedBlocks[groupName].list.push(item);
-                }
-            }),
-    }))
-);
-
-/**
- * 初始化页面, 如果url更新了, 那么会初始化`groupedBlocks`变量
- * @returns 
- */
-function initComponent () {
-    const location = useLocation();
-    const groupedBlocks = useStore(state => state.groupedBlocks);
-    const setGroupedBlocks = useStore((state) => state.setGroupedBlocks);
-    const addCodeBlock = useStore(state => state.addCodeBlock);
-    if (maeLocation != location.pathname) {
-        setGroupedBlocks({}); // 清空缓存
-        maeLocation = location.pathname; // 记录当前 path
-
-        const { loader } = require('@monaco-editor/react');
-
-        // 创建主题
-        loader.init().then((monaco: any) => {
-            try {
-                import('./OneDark-Pro.json')
-                    .then((response: any) => {
-                        console.log("res", response);
-                        response.json()
-                            .then((monacoThemes: any) => {
-                                const res =  monaco.editor
-                                    .defineTheme('hx-one-dark-pro', monacoThemes as Monaco.editor.IStandaloneThemeData);
-                                console.log("加载主题: one-dark-pro", monacoThemes, res);
-                            })
-                            .catch((err: any) => console.error('response.json() Error:', err));
-                    })
-                    .catch(err => console.error('fetch Error:', err));
-            } catch (error) {
-                console.error('Error defining theme:', error);
-            }
-        });
-    }
-    return { groupedBlocks, addCodeBlock };
 }
 
 /**
