@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://HengXin666.github.io/HXLoLiHub/blog</id>
+    <title>HXLoLiHub Blog</title>
+    <updated>2025-04-22T01:35:08.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://HengXin666.github.io/HXLoLiHub/blog"/>
+    <subtitle>HXLoLiHub Blog</subtitle>
+    <icon>https://HengXin666.github.io/HXLoLiHub/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[模版文章]]></title>
+        <id>https://HengXin666.github.io/HXLoLiHub/blog/2025/4/22/02-模版</id>
+        <link href="https://HengXin666.github.io/HXLoLiHub/blog/2025/4/22/02-模版"/>
+        <updated>2025-04-22T01:35:08.000Z</updated>
+        <summary type="html"><![CDATA[这是一篇模版文章, 教您如何编写博客, 以及提供了VsCode的代码片段, 以快速编写博客!]]></summary>
+        <content type="html"><![CDATA[<p>这是一篇模版文章, 教您如何编写博客, 以及提供了<code>VsCode</code>的代码片段, 以快速编写博客!</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="vscode-代码片段-模版">VsCode 代码片段 模版<a href="https://hengxin666.github.io/HXLoLiHub/blog/2025/4/22/02-%E6%A8%A1%E7%89%88#vscode-%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5-%E6%A8%A1%E7%89%88" class="hash-link" aria-label="VsCode 代码片段 模版的直接链接" title="VsCode 代码片段 模版的直接链接">​</a></h2>
+<p>设置 -&gt; 代码片段 -&gt; markdown -&gt; 填写以下内容: (您需要修改一下<code>authors</code>为你自己的名称)</p>
+<div>加载中...</div>
+<p>然后尝试在<code>.md</code>中打<code>mdBlogBegin</code>, 理论上就会出现这个模版.</p>
+<p>如果连代码提示都没有, 那么可以尝试:</p>
+<p>点击:</p>
+<p><img decoding="async" loading="lazy" alt="步骤1" src="https://hengxin666.github.io/HXLoLiHub/assets/images/PixPin_2025-04-22_02-14-41-127b4f93d071bd236c528c23b29a7e5e.png" width="799" height="346" style="width:auto;border-radius:0"></p>
+<p>然后会出现:</p>
+<p><img decoding="async" loading="lazy" alt="步骤2" src="https://hengxin666.github.io/HXLoLiHub/assets/images/PixPin_2025-04-22_02-15-08-7be10651cfb3c25c407c473d7ba11a1f.png" width="971" height="628" style="width:auto;border-radius:0"></p>
+<p>然后就会跳转到配置文件:</p>
+<div>加载中...</div>
+<p>然后回答<code>.md</code>文件, 应该就有代码提示了~</p>]]></content>
+        <author>
+            <name>Heng_Xin</name>
+            <email>282000500@qq.com</email>
+            <uri>https://github.com/HengXin666</uri>
+        </author>
+        <category label="模版" term="模版"/>
+        <category label="Docusaurus" term="Docusaurus"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[第一篇测试文章]]></title>
+        <id>https://HengXin666.github.io/HXLoLiHub/blog/2025/4/22/01-测试博客</id>
+        <link href="https://HengXin666.github.io/HXLoLiHub/blog/2025/4/22/01-测试博客"/>
+        <updated>2025-04-22T01:35:01.000Z</updated>
+        <summary type="html"><![CDATA[这是一个测试博客文章.]]></summary>
+        <content type="html"><![CDATA[<p>这是一个测试博客文章.</p>
+<div class="markdown-alert markdown-alert-tip">
+<p class="markdown-alert-title"><span class="octicon octicon-tip" style="--oct-icon:url(&quot;data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' class='octicon octicon-light-bulb mr-2' viewBox='0 0 16 16' version='1.1' width='16' height='16' aria-hidden='true'%3E%3Cpath d='M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z'%3E%3C/path%3E%3C/svg%3E&quot;)"></span>Tip</p>
+<p>上面是摘要. <code>外面</code>看不见下面的内容.</p>
+</div>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="依旧支持-vscode-编辑器">依旧支持 vscode 编辑器<a href="https://hengxin666.github.io/HXLoLiHub/blog/2025/4/22/01-%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2#%E4%BE%9D%E6%97%A7%E6%94%AF%E6%8C%81-vscode-%E7%BC%96%E8%BE%91%E5%99%A8" class="hash-link" aria-label="依旧支持 vscode 编辑器的直接链接" title="依旧支持 vscode 编辑器的直接链接">​</a></h2>
+<div>加载中...</div>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="依旧支持-leetcode-组合代码块">依旧支持 LeetCode 组合代码块<a href="https://hengxin666.github.io/HXLoLiHub/blog/2025/4/22/01-%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2#%E4%BE%9D%E6%97%A7%E6%94%AF%E6%8C%81-leetcode-%E7%BB%84%E5%90%88%E4%BB%A3%E7%A0%81%E5%9D%97" class="hash-link" aria-label="依旧支持 LeetCode 组合代码块的直接链接" title="依旧支持 LeetCode 组合代码块的直接链接">​</a></h2>
+<!-- -->
+]]></content>
+        <author>
+            <name>Heng_Xin</name>
+            <email>282000500@qq.com</email>
+            <uri>https://github.com/HengXin666</uri>
+        </author>
+        <category label="测试" term="测试"/>
+        <category label="demo" term="demo"/>
+        <category label="Docusaurus" term="Docusaurus"/>
+    </entry>
+</feed>
