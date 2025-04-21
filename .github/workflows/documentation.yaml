@@ -1,55 +1,51 @@
-# 将静态内容部署到 GitHub Pages 的简单工作流程
-name: 部署静态网页
+name: Node.js CI
 
 on:
-  # 在针对默认分支的推送上运行
   push:
-    branches: [main]
-
-  # 允许您从 Actions 选项卡
-  workflow_dispatch:
-
-# 设置GITHUB_TOKEN的权限以允许部署到 GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# 允许一个并发部署
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
-env:
-  # 托管的 GitHub 运行器有 7 GB 的可用内存, 让我们使用 6 GB
-  NODE_OPTIONS: --max-old-space-size=6144
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  # 单个部署作业, 因为我们只是部署
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: 设置 Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
         with:
-          node-version: 18
-          cache: yarn
-      - name: 安装依赖项
-        run: yarn install --frozen-lockfile --non-interactive
-      - name: 构建
-        run: yarn build
-      - name: 设置页面
-        uses: actions/configure-pages@v4
-      - name: 上传构件
-        uses: actions/upload-pages-artifact@v2
+          node-version: '18.x'
+      - name: Test Build
+        run: |
+          if [ -e yarn.lock ]; then
+            yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+            npm ci
+          else
+            npm i
+          fi
+          npm run build
+  gh-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
         with:
-          # 上传整个仓库
-          path: build
-      - name: 部署到 GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v3
+          node-version: '18.x'
+      - uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.GH_PAGES_DEPLOY }}
+      - name: Release to GitHub Pages
+        env:
+          USE_SSH: true
+          GIT_USER: czasg
+        run: |
+          git config --global user.email "282000500@qq.com"
+          git config --global user.name "Heng_Xin"
+          if [ -e yarn.lock ]; then
+            yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+            npm ci
+          else
+            npm i
+          fi
+          npm run deploy
