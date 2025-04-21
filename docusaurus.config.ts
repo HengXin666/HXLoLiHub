@@ -8,12 +8,12 @@ import rehypeKatex from 'rehype-katex'; // katex渲染
 // 站点配置
 const config: Config = {
   title: "HXLoLiHub", // 项目名称
-  tagline: "妹宅知识管理系统！", // 项目的 tagline（副标题）
+  tagline: "ここから先は一方通行だ!", // 项目的 tagline（副标题）
   favicon: "img/favicon.ico", // 项目图标, 可以根据实际情况更换
 
   // 站点的URL, GitHub Pages 一般需要设置为项目的路径
   url: "https://HengXin666.github.io", // GitHub Pages 地址
-  baseUrl: "/HXLoLiHub/", // 基础路径
+  baseUrl: "/HXLoLiHub", // 基础路径
   trailingSlash: false,
 
   // GitHub Pages 部署配置, 修改为你的 GitHub 项目名称
@@ -86,6 +86,8 @@ const config: Config = {
       theme: 'light_high_contrast',
       darkTheme: 'dark_tritanopia'
     },
+    // 自动隐藏导航栏
+    hideOnScroll: true,
     // 项目的社交卡片图像
     image: "img/docusaurus-social-card.jpg",
     navbar: {
@@ -139,7 +141,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `版权所有 © ${new Date().getFullYear()} HXLoLiHub, Inc. 由 Docusaurus 构建.<br>本站所有作品均采用CC BY-NC-ND 4.0许可协议.<br>未经允许, 禁止用于商业用途, 转载需注明出处.`, // 页脚版权信息
+      copyright: `版权所有 © ${new Date().getFullYear()} HXLoLiHub, Inc. 由 Docusaurus 构建.`, // 页脚版权信息
     },
     prism: {
       theme: prismThemes.oneDark,
