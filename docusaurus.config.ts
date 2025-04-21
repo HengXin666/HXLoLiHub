@@ -46,6 +46,7 @@ const config: Config = {
           rehypePlugins: [rehypeKatex],
           editUrl: "https://github.com/HengXin666/HXLoLiHub/edit/main/", // 文档编辑链接, 指向 GitHub 项目
           showLastUpdateTime: true, // 显示最后编辑时间
+          showLastUpdateAuthor: true,  // 显示更新作者
         },
         blog: {
           showReadingTime: true, // 显示博客阅读时间
@@ -57,11 +58,13 @@ const config: Config = {
           },
           editUrl: "https://github.com/HengXin666/HXLoLiHub/edit/main/", // 博客编辑链接, 指向 GitHub 项目
           showLastUpdateTime: true, // 显示最后编辑时间
+          showLastUpdateAuthor: true,  // 显示更新作者
         },
         pages: {
           remarkPlugins: [remarkGithubAlerts, remarkMath],
           rehypePlugins: [rehypeKatex],
           showLastUpdateTime: true, // 显示最后编辑时间
+          showLastUpdateAuthor: true,  // 显示更新作者
         },
         theme: {
           // 可以放置自定义的 CSS 样式

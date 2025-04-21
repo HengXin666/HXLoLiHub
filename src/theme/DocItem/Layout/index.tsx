@@ -59,7 +59,7 @@ export default function DocItemLayout ({ children }: Props): ReactNode {
                         <DocItemContent>{children}</DocItemContent>
                         <DocItemFooter />
                     </article>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
                         请作者喝奶茶:
                         <div className="icon-container" style={{marginLeft: '10px'}}>
                             <img src={`${config.baseUrl}/default-icons/alipay.svg`} alt="Alipay Icon" className="icon" />
