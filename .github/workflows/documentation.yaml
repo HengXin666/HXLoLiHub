@@ -37,7 +37,7 @@ jobs:
       - name: Release to GitHub Pages
         env:
           USE_SSH: true
-          GIT_USER: czasg
+          GIT_USER: Heng_Xin
         run: |
           git config --global user.email "282000500@qq.com"
           git config --global user.name "Heng_Xin"
