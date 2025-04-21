@@ -31,7 +31,7 @@ const config: Config = {
 
   plugins: [
     "plugin-image-zoom", // 图片单击放大
-    "docusaurus-graph", // 文档关系图
+    "docusaurus-graph",  // 文档关系图
   ],
 
   // 使用 presets 配置
@@ -45,11 +45,12 @@ const config: Config = {
           remarkPlugins: [remarkGithubAlerts, remarkMath],
           rehypePlugins: [rehypeKatex],
           editUrl: "https://github.com/HengXin666/HXLoLiHub/edit/main/", // 文档编辑链接, 指向 GitHub 项目
-          showLastUpdateTime: true, // 显示最后编辑时间
-          showLastUpdateAuthor: true,  // 显示更新作者
+          showLastUpdateTime: true,   // 显示最后编辑时间
+          showLastUpdateAuthor: true, // 显示更新作者
         },
         blog: {
-          showReadingTime: true, // 显示博客阅读时间
+          blogSidebarTitle: '所有文章', // 侧边栏标题
+          blogSidebarCount: 'ALL',     // 显示所有的文章
           remarkPlugins: [remarkGithubAlerts, remarkMath],
           rehypePlugins: [rehypeKatex],
           feedOptions: {
@@ -57,14 +58,15 @@ const config: Config = {
             xslt: true,
           },
           editUrl: "https://github.com/HengXin666/HXLoLiHub/edit/main/", // 博客编辑链接, 指向 GitHub 项目
-          showLastUpdateTime: true, // 显示最后编辑时间
-          showLastUpdateAuthor: true,  // 显示更新作者
+          showReadingTime: true,      // 显示博客阅读时间
+          showLastUpdateTime: true,   // 显示最后编辑时间
+          showLastUpdateAuthor: true, // 显示更新作者
         },
         pages: {
           remarkPlugins: [remarkGithubAlerts, remarkMath],
           rehypePlugins: [rehypeKatex],
-          showLastUpdateTime: true, // 显示最后编辑时间
-          showLastUpdateAuthor: true,  // 显示更新作者
+          showLastUpdateTime: true,   // 显示最后编辑时间
+          showLastUpdateAuthor: true, // 显示更新作者
         },
         theme: {
           // 可以放置自定义的 CSS 样式
@@ -103,7 +105,7 @@ const config: Config = {
           type: "docSidebar",
           sidebarId: "tutorialSidebar", // 侧边栏ID
           position: "left",
-          label: "文档", // 导航栏标签
+          label: "笔记", // 导航栏标签
         },
         {
           to: "/blog", // 跳转到博客页面

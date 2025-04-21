@@ -52,3 +52,24 @@
 .theme-doc-markdown {
   padding: 0 !important;
 }
+
+/* === github h1 h2 h3 下划线样式 === */
+/* 设置 h1, h2, h3 的样式 */
+.markdown h1, .markdown h2 {
+  border-bottom: 1px solid #3d444db3;
+}
+
+/* 设置 h1, h2, h3 的字体 */
+.markdown h1 {
+  font-size: 2rem; /* GitHub 的 h1 大小 */
+  padding-bottom: .3em;
+}
+
+.markdown h2 {
+  font-size: 1.5rem; /* GitHub 的 h2 大小 */
+  padding-bottom: .3em;
+}
+
+.markdown h3 {
+  font-size: 1.25rem; /* GitHub 的 h3 大小 */
+}
