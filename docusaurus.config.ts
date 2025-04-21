@@ -89,11 +89,10 @@ const config: Config = {
       theme: 'light_high_contrast',
       darkTheme: 'dark_tritanopia'
     },
-    // 自动隐藏导航栏
-    hideOnScroll: true,
     // 项目的社交卡片图像
     image: "img/docusaurus-social-card.jpg",
     navbar: {
+      hideOnScroll: true, // 自动隐藏导航栏
       title: "HXLoLiHub", // 导航栏标题
       logo: {
         alt: "HXLoLiHub Logo",

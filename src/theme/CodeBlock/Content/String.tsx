@@ -522,6 +522,7 @@ function makeVsCodeCodeBlock ({
                                     cursorBlinking: 'smooth',    // 光标样式
                                     links: true, // 可以点击链接
                                     codeLens: true,
+                                    lineHeight: 20, // 行间距
                                 }}
                                 width='auto'
                                 height={editorHeight}
