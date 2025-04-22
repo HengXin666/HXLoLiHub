@@ -53,6 +53,25 @@
   padding: 0 !important;
 }
 
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* === github h1 h2 h3 下划线样式 === */
 /* 设置 h1, h2, h3 的样式 */
 .markdown h1, .markdown h2 {

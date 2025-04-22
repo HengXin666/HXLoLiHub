@@ -95,7 +95,7 @@ const config: Config = {
       darkTheme: 'dark_tritanopia'
     },
     // 项目的社交卡片图像
-    image: "img/docusaurus-social-card.jpg",
+    image: "img/logo.png",
     navbar: {
       hideOnScroll: true, // 自动隐藏导航栏
       title: "HXLoLiHub", // 导航栏标题
@@ -153,7 +153,7 @@ const config: Config = {
             {
               html: `
                 <a href="https://docusaurus.io" target="_blank" rel="noreferrer noopener">
-                  <img src="${BaseUrl}/img/buildwith.png" alt="build with docusaurus" width="120" height="50"/>
+                  <img src="${BaseUrl}/default-img/buildwith.png" alt="build with docusaurus" width="120" height="50"/>
                 </a>
                 `,
             },
