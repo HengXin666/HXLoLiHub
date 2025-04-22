@@ -6,6 +6,8 @@ import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import config from '@generated/docusaurus.config';
 
+import './index.css';
+
 // 模块卡片组件
 function FeatureCard ({
     title, description, icon, link
@@ -16,24 +18,15 @@ function FeatureCard ({
     link: string;
 }) {
     return (
-        <Link 
-            className="col col--3" 
-            style={{
-                margin: '20px',
-                padding: '20px',
-                backgroundClip: '#202126',
-                borderColor: '#990099',
-                borderWidth: '1.2px',
-                borderStyle: 'solid',
-                borderRadius: '25px',
-                textDecoration: 'none',
-            }}
-            to={link}
-        >
-            <div>{icon}</div>
-            <h3>{title}</h3>
-            <p>{description}</p>
-        </Link>
+        <div className="animated-box">
+            <Link
+                style={{textDecoration: 'none'}}
+            >
+                <div>{icon}</div>
+                <h3 style={{ color: '#E0E0D8' }}>{title}</h3>
+                <p style={{ color: '#929AA1' }}>{description}</p>
+            </Link>
+        </div>
     );
 }
 
@@ -65,9 +58,9 @@ function HomepageHeader () {
                             color: 'black',
                             borderRadius: '8px',
                         }}
-                        to="/docs"
+                        to="/docs/HXLoLiHub使用说明/简介"
                     >
-                        快速开始教程
+                        快速开始
                     </Link>
                 </div>
             </div>
@@ -75,7 +68,12 @@ function HomepageHeader () {
                 <img
                     src={`${config.baseUrl}/img/main_menu_misaka.png`}
                     alt="Image"
-                    style={{ width: '100%', height: 'auto' }}
+                    style={{
+                        width: '100%',
+                        height: 'auto',
+                        borderRadius: '10px',
+                        boxShadow: '0px 5px 10px 1px #6BE4F6'
+                    }}
                 />
             </div>
         </header>
@@ -92,41 +90,41 @@ export default function Home (): ReactNode {
             <HomepageHeader />
             <main>
                 <div className="container">
-                    <div className="row">
+                    <div className="row justify-content-center">
                         {/* 功能模块卡片 */}
                         <FeatureCard
-                            title="Github Page一键部署"
-                            description="无需自建服务器, 可以一键部署到Github Page上."
+                            title="Github Page 一键部署"
+                            description="简化部署流程，无需额外配置服务器，可直接将项目一键部署至 Github Pages，快速上线。"
                             icon={<i className="fas fa-cogs" />}
-                            link="/docs/docker"
+                            link="/docs/github-page"
                         />
                         <FeatureCard
                             title="以编辑预览"
-                            description="支持网页端工作台编辑.drawio.svg文件, 方便预览, 而不是仅放大图片."
+                            description="支持网页端工作台编辑 .drawio.svg 文件，方便预览，而不是仅放大图片。"
                             icon={<i className="fas fa-image" />}
-                            link="/docs/images"
+                            link="/docs/drawio"
                         />
                         <FeatureCard
                             title="支持编辑代码块"
-                            description="内嵌VsCode同款编辑器, 在网页端可以编辑代码. 而不是仅复制. 支持一键还原到原本文本."
+                            description="内嵌VsCode同款编辑器，在网页端可以编辑代码，而不是仅复制。支持一键还原到原本文本。"
                             icon={<i className="fas fa-tasks" />}
-                            link="/docs/todo"
+                            link="/docs/code"
                         />
                         <FeatureCard
                             title="高度自定义"
-                            description="基于 Docusaurus 魔改, 您可以方便在此基础上二次自定义."
+                            description="基于 Docusaurus 定制开发，支持高度自定义，用户可以在此基础上根据需求进行二次开发，扩展功能和设计。"
                             icon={<i className="fas fa-users" />}
-                            link="/docs/multi-user"
+                            link="/docs/todo"
                         />
                         <FeatureCard
                             title="版本管理"
-                            description="项目本身可推送到Github上, 独立的纯文件项目, 可以轻松的使用git进行版本管理."
+                            description="项目可直接推送至 Github 进行版本控制，独立的纯文件项目能够轻松实现 Git 版本管理，保证代码与文档的一致性和可追溯性。"
                             icon={<i className="fas fa-cogs" />}
-                            link="/docs/functions"
+                            link="/docs/git"
                         />
                         <FeatureCard
                             title="响应式博客 / 移动端支持"
-                            description="博客两端适配, 完全自适应手机端浏览，登录即可拥有一个专属博客。"
+                            description="Docusaurus 内置强大的响应式设计，自动适配不同尺寸的屏幕，无论是桌面还是移动端，用户都能获得流畅的浏览体验。"
                             icon={<i className="fas fa-mobile-alt" />}
                             link="/docs/responsive"
                         />

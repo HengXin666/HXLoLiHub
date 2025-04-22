@@ -2,26 +2,12 @@ module.exports = {
   "tutorialSidebar": [
     {
       "type": "category",
-      "label": "开发笔记",
-      "collapsible": true,
-      "items": [],
-      "customProps": {
-        "icon": "/HXLoLiHub/default-icons/file_type_markdown.svg",
-        "tags": []
-      },
-      "link": {
-        "type": "doc",
-        "id": "开发笔记/index"
-      }
-    },
-    {
-      "type": "category",
-      "label": "测试",
+      "label": "HXLoLiHub使用说明",
       "collapsible": true,
       "items": [
         {
           "type": "category",
-          "label": "测试笔记",
+          "label": "简介",
           "collapsible": true,
           "items": [],
           "customProps": {
@@ -30,18 +16,58 @@ module.exports = {
           },
           "link": {
             "type": "doc",
-            "id": "测试/测试笔记/index"
+            "id": "HXLoLiHub使用说明/简介/index"
+          }
+        },
+        {
+          "type": "category",
+          "label": "如何开始编写",
+          "collapsible": true,
+          "items": [],
+          "customProps": {
+            "icon": "/HXLoLiHub/default-icons/file_type_markdown.svg",
+            "tags": []
+          },
+          "link": {
+            "type": "doc",
+            "id": "HXLoLiHub使用说明/如何开始编写/index"
+          }
+        },
+        {
+          "type": "category",
+          "label": "支持的语法",
+          "collapsible": true,
+          "items": [],
+          "customProps": {
+            "icon": "/HXLoLiHub/default-icons/file_type_markdown.svg",
+            "tags": []
+          },
+          "link": {
+            "type": "doc",
+            "id": "HXLoLiHub使用说明/支持的语法/index"
           }
         }
       ],
       "customProps": {
         "icon": "/HXLoLiHub/icons/misaka.png",
         "tags": [
-          "C++",
-          "Jvav",
-          "py",
-          "测试"
+          "说明",
+          "Docusaurus"
         ]
+      }
+    },
+    {
+      "type": "category",
+      "label": "关于",
+      "collapsible": true,
+      "items": [],
+      "customProps": {
+        "icon": "/HXLoLiHub/default-icons/file_type_markdown.svg",
+        "tags": []
+      },
+      "link": {
+        "type": "doc",
+        "id": "关于/index"
       }
     }
   ]
