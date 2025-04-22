@@ -21,14 +21,14 @@
 /* ===== Markdown 样式 ===== */
 
 /* 包裹 Markdown 内容的区域 */
-.theme-doc-markdown .markdown {
+.markdown {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
 /* ===== 图片样式：支持自定义宽度和居中 ===== */
 
 /* 限定在文档内容区域 */
-.theme-doc-markdown img {
+.markdown img {
   display: block;
   margin: 0rem auto;
   height: auto;
@@ -36,20 +36,20 @@
 }
 
 /* 鼠标悬停时稍微放大 */
-.theme-doc-markdown img:hover {
+.markdown img:hover {
   transform: scale(1.02);
 }
 
 /* ===== 表格居中 ===== */
 /* 参照: https://github.com/facebook/docusaurus/issues/7640 */
-.theme-doc-markdown table {
+.markdown table {
   display: table;      /* 确保表格的 display 属性是 table */
   margin-left: auto;   /* 左右外边距为自动, 水平居中 */
   margin-right: auto;  /* 左右外边距为自动, 水平居中 */
 }
 
 /* ===== 修复 Docusaurus 额外的 Padding ===== */
-.theme-doc-markdown {
+.markdown {
   padding: 0 !important;
 }
 

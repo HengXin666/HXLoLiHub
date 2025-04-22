@@ -54,8 +54,8 @@ export default function MDXImg (props: Props): ReactNode {
                 loading="lazy"
                 {...props}
                 style={{
-                    width: width || 'auto',
-                    borderRadius: borderRadius ? `${borderRadius}px` : 0,
+                    width: width,
+                    borderRadius: borderRadius && `${borderRadius}px`,
                 }}
             />
         );

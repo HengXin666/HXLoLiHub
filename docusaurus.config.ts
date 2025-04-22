@@ -5,6 +5,9 @@ import remarkGithubAlerts from 'remark-github-alerts'; // Github tip标签渲染
 import remarkMath from 'remark-math';   // 数学渲染
 import rehypeKatex from 'rehype-katex'; // katex渲染
 
+// 基础路径, 末尾不带 '/'
+const BaseUrl = "/HXLoLiHub";
+
 // 站点配置
 const config: Config = {
   title: "HXLoLiHub", // 项目名称
@@ -13,7 +16,7 @@ const config: Config = {
 
   // 站点的URL, GitHub Pages 一般需要设置为项目的路径
   url: "https://HengXin666.github.io", // GitHub Pages 地址
-  baseUrl: "/HXLoLiHub", // 基础路径
+  baseUrl: BaseUrl, // 基础路径
   trailingSlash: false,
 
   // GitHub Pages 部署配置, 修改为你的 GitHub 项目名称
@@ -113,6 +116,16 @@ const config: Config = {
           position: "left",
         },
         {
+          label: "更多",
+          position: "right",
+          items: [
+            {
+              to: "/blog/archive",
+              label: "归档",
+            },
+          ]
+        },
+        {
           href: "https://github.com/HengXin666/HXLoLiHub", // 项目的 GitHub 地址
           label: "GitHub",
           position: "right",
@@ -123,29 +136,32 @@ const config: Config = {
       style: "dark", // 页脚风格
       links: [
         {
-          title: "帮助",
-          items: [
-            {
-              label: "文档", // 帮助链接
-              to: "/docs/intro",
-            },
-          ],
-        },
-        {
           title: "社区",
           items: [
             {
               label: "GitHub",
               href: "https://github.com/HengXin666/HXLoLiHub",
             },
+          ],
+        },
+        {
+
+        },
+        {
+          title: '更多',
+          items: [
             {
-              label: "讨论",
-              href: "https://discord.com/invite/docusaurus", // 可以替换为实际的讨论链接
+              html: `
+                <a href="https://docusaurus.io" target="_blank" rel="noreferrer noopener">
+                  <img src="${BaseUrl}/img/buildwith.png" alt="build with docusaurus" width="120" height="50"/>
+                </a>
+                `,
             },
           ],
         },
       ],
-      copyright: `版权所有 © ${new Date().getFullYear()} HXLoLiHub, Inc. 由 Docusaurus 构建.`, // 页脚版权信息
+      // 页脚版权信息
+      copyright: `版权所有 © 2025 - ${new Date().getFullYear()} HXLoLiHub, Inc. 由 Docusaurus 构建.`,
     },
     prism: {
       theme: prismThemes.oneDark,

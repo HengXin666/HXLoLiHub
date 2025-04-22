@@ -166,7 +166,7 @@ function MakeSimpleCodeBlock (
         title: titleProp,
         showLineNumbers: showLineNumbersProp,
         language: languageProp,
-        fkPrefixLanguage,
+        fkPrefixLanguage = '',
     } = props;
 
     // 如果是图表, 则渲染图表
@@ -336,7 +336,7 @@ function makeVsCodeCodeBlock ({
     showLineNumbers: showLineNumbersProp,
     language: languageProp,
 }: Props,
-    fkPrefixLanguage: string
+    fkPrefixLanguage: string = ''
 ) {
     /*
         import * as monaco from "monaco-editor";
@@ -609,7 +609,7 @@ export default function CodeBlockString ({
     initComponent(); // 保证初始化页面
 
     // 获取语言
-    const fkPrefixLanguage: string = blockClassName.length ? blockClassName.split("-")[1] : '';
+    const fkPrefixLanguage: string = blockClassName.length ? blockClassName.split("-")[1] : "";
 
     // 解析 metastring 判断是否包含 [组名-标题] 格式
     // 特别的, 它不会被渲染为 vscode 样式, 因为没有必要.

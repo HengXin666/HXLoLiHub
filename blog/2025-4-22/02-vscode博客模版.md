@@ -1,10 +1,11 @@
 ---
 authors: Heng_Xin
-title: 模版文章
+title: VsCode博客模版
 date: 2025-4-22 01:35:08
 tags:
     - 模版
     - docusaurus
+    - vscode
 ---
 
 这是一篇模版文章, 教您如何编写博客, 以及提供了`VsCode`的代码片段, 以快速编写博客!
