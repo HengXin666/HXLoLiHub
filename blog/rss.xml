@@ -9,27 +9,28 @@
         <generator>https://github.com/jpmonette/feed</generator>
         <language>zh-Hans</language>
         <item>
-            <title><![CDATA[模版文章]]></title>
-            <link>https://HengXin666.github.io/HXLoLiHub/blog/2025/4/22/02-模版</link>
-            <guid>https://HengXin666.github.io/HXLoLiHub/blog/2025/4/22/02-模版</guid>
+            <title><![CDATA[VsCode博客模版]]></title>
+            <link>https://HengXin666.github.io/HXLoLiHub/blog/2025/4/22/02-vscode博客模版</link>
+            <guid>https://HengXin666.github.io/HXLoLiHub/blog/2025/4/22/02-vscode博客模版</guid>
             <pubDate>Tue, 22 Apr 2025 01:35:08 GMT</pubDate>
             <description><![CDATA[这是一篇模版文章, 教您如何编写博客, 以及提供了VsCode的代码片段, 以快速编写博客!]]></description>
             <content:encoded><![CDATA[<p>这是一篇模版文章, 教您如何编写博客, 以及提供了<code>VsCode</code>的代码片段, 以快速编写博客!</p>
-<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="vscode-代码片段-模版">VsCode 代码片段 模版<a href="https://hengxin666.github.io/HXLoLiHub/blog/2025/4/22/02-%E6%A8%A1%E7%89%88#vscode-%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5-%E6%A8%A1%E7%89%88" class="hash-link" aria-label="VsCode 代码片段 模版的直接链接" title="VsCode 代码片段 模版的直接链接">​</a></h2>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="vscode-代码片段-模版">VsCode 代码片段 模版<a href="https://hengxin666.github.io/HXLoLiHub/blog/2025/4/22/02-vscode%E5%8D%9A%E5%AE%A2%E6%A8%A1%E7%89%88#vscode-%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5-%E6%A8%A1%E7%89%88" class="hash-link" aria-label="VsCode 代码片段 模版的直接链接" title="VsCode 代码片段 模版的直接链接">​</a></h2>
 <p>设置 -&gt; 代码片段 -&gt; markdown -&gt; 填写以下内容: (您需要修改一下<code>authors</code>为你自己的名称)</p>
 <div>加载中...</div>
 <p>然后尝试在<code>.md</code>中打<code>mdBlogBegin</code>, 理论上就会出现这个模版.</p>
 <p>如果连代码提示都没有, 那么可以尝试:</p>
 <p>点击:</p>
-<p><img decoding="async" loading="lazy" alt="步骤1" src="https://hengxin666.github.io/HXLoLiHub/assets/images/PixPin_2025-04-22_02-14-41-127b4f93d071bd236c528c23b29a7e5e.png" width="799" height="346" style="width:auto;border-radius:0"></p>
+<p><img decoding="async" loading="lazy" alt="步骤1" src="https://hengxin666.github.io/HXLoLiHub/assets/images/PixPin_2025-04-22_02-14-41-127b4f93d071bd236c528c23b29a7e5e.png" width="799" height="346"></p>
 <p>然后会出现:</p>
-<p><img decoding="async" loading="lazy" alt="步骤2" src="https://hengxin666.github.io/HXLoLiHub/assets/images/PixPin_2025-04-22_02-15-08-7be10651cfb3c25c407c473d7ba11a1f.png" width="971" height="628" style="width:auto;border-radius:0"></p>
+<p><img decoding="async" loading="lazy" alt="步骤2" src="https://hengxin666.github.io/HXLoLiHub/assets/images/PixPin_2025-04-22_02-15-08-7be10651cfb3c25c407c473d7ba11a1f.png" width="971" height="628"></p>
 <p>然后就会跳转到配置文件:</p>
 <div>加载中...</div>
 <p>然后回答<code>.md</code>文件, 应该就有代码提示了~</p>]]></content:encoded>
             <author>282000500@qq.com (Heng_Xin)</author>
             <category>模版</category>
             <category>Docusaurus</category>
+            <category>VsCode</category>
         </item>
         <item>
             <title><![CDATA[第一篇测试文章]]></title>
