@@ -103,4 +103,5 @@ sidebar.tutorialSidebar = scanDocs(docsDir).items;
 
 const sidebarContent = `module.exports = ${JSON.stringify(sidebar, null, 2)};\n`;
 fs.outputFileSync(path.join(__dirname, '../sidebars.ts'), sidebarContent);
-console.log('✅ sidebars.ts 已自动生成');
+
+console.log('[OK]: sidebars.ts 已自动生成');

@@ -150,6 +150,22 @@ function normalizeLanguage (language: string | undefined): string | undefined {
     return language?.toLowerCase();
 }
 
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
+
+interface KatexProps {
+  content: string;
+}
+
+const Katex: React.FC<KatexProps> = ({ content }) => {
+  const htmlContent = katex.renderToString(content, {
+    throwOnError: false, // 遇到错误时不抛出异常
+  });
+
+  return <span dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+};
+
+
 /**
  * 创建默认代码块
  * @param param0 
@@ -170,14 +186,44 @@ function MakeSimpleCodeBlock (
     } = props;
 
     // 如果是图表, 则渲染图表
-    if (fkPrefixLanguage.toLowerCase() === 'mermaid') {
-        return metastring === 'leetcode'
-            ? (
-                <div className='leetcode-tabs-content'>
-                    <Mermaid value={children} />
-                </div>
-            )
-            : (<Mermaid value={children} />);
+    switch (fkPrefixLanguage.toLowerCase()) {
+        case 'mermaid':
+            return metastring === 'leetcode'
+                ? (
+                    <div 
+                        className='leetcode-tabs-content'
+                        style={{ textAlign: 'center' }}
+                    >
+                        <Mermaid value={children} />
+                    </div>
+                )
+                : (
+                    <div
+                        style={{ textAlign: 'center' }}
+                    >
+                        <Mermaid value={children} />
+                    </div>
+                );
+        case 'latex':
+        case 'katex':
+            return metastring === 'leetcode' 
+                ? (
+                    <div 
+                        className='leetcode-tabs-content'
+                        style={{ textAlign: 'center' }}
+                    >
+                        <Katex content={children} />
+                    </div>
+                )
+                : (
+                    <div 
+                        style={{ textAlign: 'center' }}
+                    >
+                        <Katex content={children} />
+                    </div>
+                );
+        default:
+            break;
     }
 
     const {

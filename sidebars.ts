@@ -35,7 +35,7 @@ module.exports = {
         },
         {
           "type": "category",
-          "label": "支持的语法",
+          "label": "MarkDown拓展",
           "collapsible": true,
           "items": [],
           "customProps": {
@@ -44,7 +44,7 @@ module.exports = {
           },
           "link": {
             "type": "doc",
-            "id": "HXLoLiHub使用说明/支持的语法/index"
+            "id": "HXLoLiHub使用说明/MarkDown拓展/index"
           }
         }
       ],
