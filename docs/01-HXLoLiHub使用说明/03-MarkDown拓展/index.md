@@ -125,7 +125,32 @@ fk [本地路径] (目标URL) <目标对象名称> {目标对象邮箱} top-back
 ````
 
 > [!TIP]
-> 目前并 **不支持** `组合代码块`和`可编辑代码块`混用
+> 我们支持 组合代码块 + VsCode 编辑器模式, 但是并不推荐这样使用:
+
+```c++ [gvsc-CPP] vscode
+int main() {
+    return 0;
+}
+```
+
+```py [gvsc-Python] vscode
+print("Hello VsCode")
+```
+
+````markdown [gvsc-MD] vscode
+```c++ [gvsc-CPP] vscode
+int main() {
+    return 0;
+}
+```
+
+```py [gvsc-Python] vscode
+print("Hello VsCode")
+```
+````
+
+> [!NOTE]
+> 它的语法是 `代码 [分组-标题] vscode` (具体, 请见上面组合代码块的`MD`页面)
 
 ## 四、Mermaid 图表渲染
 
@@ -333,4 +358,48 @@ $$
 
 > [!CAUTION]
 > Negative potential consequences of an action.
+```
+
+## 八、视频拓展
+
+视频功能是在多行代码块的基础上拓展的, 目前支持的视频源如下:
+
+1. [BiLiBiLi](https://www.bilibili.com/)
+
+````markdown
+```bilibili ##BV1Js411o76u##w90%##h600##danmaku=false##p=2##
+BV1Js411o76u
+```
+````
+
+**参数解析**:
+
+- bilibili: 解析为 bilibili 视频, 必须为第一个参数(即原代码语言字段), 然后必须接空格
+
+- avxxxxx: 视频 avid, B站早期使用的编号, 但已经用尽.
+- BVxxxxx: 视频 bvid, 视频id. (`av`/`bv`字段二选一填写, 如果都填, 那么优先使用`bv`字段)
+
+- [可选] w90%: 视频宽度为 90%, 如果宽度不以 `%` 结尾, 则会以像素计算. 如果未指定宽度, 则为 `75%`.
+
+- [可选] h600: 视频宽度为高度为 600 像素, 高度 **不能** 为百分比. 如果未指定高度, 则为 400 像素
+
+- [可选] danmaku=false: 表示 **不开启** 弹幕, 其他值则是开启弹幕(默认)
+
+- [可选] p=2: 表示视频分P, 即第几集, 不填写则默认 `p=1`.
+
+其会被渲染为:
+
+```bilibili ##BV1Js411o76u##w90%##h600##danmaku=false##p=2##
+BV1Js411o76u
+```
+
+> [!TIP]
+> 同理, 依旧支持组合代码块渲染:
+
+```bilibili [g4-BV1Js411o76u] ##BV1Js411o76u##
+BV1Js411o76u
+```
+
+```bilibili [g4-AV314] ##av314##w90%##h600##
+av314
 ```

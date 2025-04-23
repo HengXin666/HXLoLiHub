@@ -28,14 +28,20 @@ import TabItem from '@theme/TabItem';
 // 图表
 import Mermaid from '@theme/Mermaid';
 
+// Katex
+import Katex from '@site/src/components/Katex';
+
+// VsCode 编辑器
 import dynamic from 'next/dynamic';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { FaCheck, FaUndo, FaCopy } from 'react-icons/fa'; // 引入勾选、还原、复制图标
 import type * as Monaco from 'monaco-editor'; // 仅引入类型
 
+// 样式
 import styles from './styles.module.css';
 import OneDarkPro from './OneDark-Pro.json';
 import './leetcode.css';
+import matchRegex from '@site/src/utils/matchRegex';
 
 // 仅客户端加载的`MonacoEditor`
 const MonacoEditor = dynamic(() => import('react-monaco-editor').then(mod => mod.default), { ssr: false }); 
@@ -150,22 +156,6 @@ function normalizeLanguage (language: string | undefined): string | undefined {
     return language?.toLowerCase();
 }
 
-import katex from 'katex';
-import 'katex/dist/katex.min.css';
-
-interface KatexProps {
-  content: string;
-}
-
-const Katex: React.FC<KatexProps> = ({ content }) => {
-  const htmlContent = katex.renderToString(content, {
-    throwOnError: false, // 遇到错误时不抛出异常
-  });
-
-  return <span dangerouslySetInnerHTML={{ __html: htmlContent }} />;
-};
-
-
 /**
  * 创建默认代码块
  * @param param0 
@@ -173,7 +163,7 @@ const Katex: React.FC<KatexProps> = ({ content }) => {
  * @returns 
  */
 function MakeSimpleCodeBlock (
-    props: Props & { fkPrefixLanguage: string }
+    props: Props & { fkPrefixLanguage: string, isLeeCodeTab: boolean }
 ) {
     const {
         children,
@@ -183,45 +173,84 @@ function MakeSimpleCodeBlock (
         showLineNumbers: showLineNumbersProp,
         language: languageProp,
         fkPrefixLanguage = '',
+        isLeeCodeTab = false,
     } = props;
+
+    if (matchRegex("(vscode)", metastring)) {
+        return (
+            <BrowserOnly fallback={<div>加载中...</div>}>
+                {() => makeVsCodeCodeBlock({
+                        children,
+                        className: blockClassName,
+                        metastring,
+                        title: titleProp,
+                        showLineNumbers: showLineNumbersProp,
+                        language: languageProp,
+                    }, fkPrefixLanguage, isLeeCodeTab)}
+            </BrowserOnly>
+        );
+    }
 
     // 如果是图表, 则渲染图表
     switch (fkPrefixLanguage.toLowerCase()) {
         case 'mermaid':
-            return metastring === 'leetcode'
-                ? (
-                    <div 
-                        className='leetcode-tabs-content'
-                        style={{ textAlign: 'center' }}
-                    >
-                        <Mermaid value={children} />
-                    </div>
-                )
-                : (
-                    <div
-                        style={{ textAlign: 'center' }}
-                    >
-                        <Mermaid value={children} />
-                    </div>
-                );
+            return (
+                <div 
+                    className={isLeeCodeTab && 'leetcode-tabs-content' || undefined}
+                    style={{ textAlign: 'center' }}
+                >
+                    <Mermaid value={children} />
+                </div>
+            );
         case 'latex':
         case 'katex':
-            return metastring === 'leetcode' 
-                ? (
+            return (
+                <div 
+                className={isLeeCodeTab && 'leetcode-tabs-content' || undefined}
+                    style={{ textAlign: 'center' }}
+                >
+                    <Katex content={children} />
+                </div>
+            );
+        case 'bilibili': {
+            const av = matchRegex("##[aA][vV](\\d+)##", metastring);
+            const bv = matchRegex("##[bB][vV]([0-9a-zA-Z]+)##", metastring);
+            if (!av && !bv) {
+                return (
                     <div 
-                        className='leetcode-tabs-content'
+                        className={isLeeCodeTab && 'leetcode-tabs-content' || undefined}
                         style={{ textAlign: 'center' }}
                     >
-                        <Katex content={children} />
-                    </div>
-                )
-                : (
-                    <div 
-                        style={{ textAlign: 'center' }}
-                    >
-                        <Katex content={children} />
+                        <span style={{color: '#ED6E69'}}>
+                            解析失败! <br /> 无法解析到av号或者bv号于: {metastring}
+                        </span>
                     </div>
                 );
+            }
+            const page: number = ((res: string | undefined) => res ? +res : undefined)(matchRegex("##[pP]=(\\d+)##", metastring)) || 1;
+            const danmaku: number = +!(matchRegex("##danmaku=(false)##", metastring) === "false");
+            const width = ((res: string | undefined) => {
+                return res ? (res.includes('%') ? res : `${res}px`) : undefined;
+            })(matchRegex("##[wW](\\d+%?)##", metastring)) || '75%';
+            const height = matchRegex("##[hH](\\d+)##", metastring) || '400';
+            const videoId = bv ? `bvid=BV${bv}` : `aid=${av}`;
+            
+            return (
+                <div 
+                    className={isLeeCodeTab && 'leetcode-tabs-content' || undefined}
+                    style={{ textAlign: 'center' }}
+                >
+                    <iframe
+                        src={`https://player.bilibili.com/player.html?isOutside=true&${videoId}&danmaku=${danmaku}&high_quality=1&autoplay=0&p=${page}`}
+                        allowFullScreen={true}
+                        title="Bilibili Video"
+                        // 禁止跳转到B站
+                        sandbox='allow-top-navigation allow-same-origin allow-forms allow-scripts'
+                        style={{ width: width, height: height && `${height}px` }}
+                    />
+                </div>
+            );
+        }
         default:
             break;
     }
@@ -372,6 +401,7 @@ function MakeSimpleCodeBlock (
  * 创建一个vscode同款编辑栏
  * @param param0 
  * @param fkPrefixLanguage 
+ * @param isLeeCodeTab 是否处于组合代码块模式? 如果是则渲染风格需要改变!
  * @returns 
  */
 function makeVsCodeCodeBlock ({
@@ -382,7 +412,8 @@ function makeVsCodeCodeBlock ({
     showLineNumbers: showLineNumbersProp,
     language: languageProp,
 }: Props,
-    fkPrefixLanguage: string = ''
+    fkPrefixLanguage: string = '',
+    isLeeCodeTab: boolean = false
 ) {
     /*
         import * as monaco from "monaco-editor";
@@ -471,115 +502,223 @@ function makeVsCodeCodeBlock ({
         };
     }, []);
 
-    return (
-        <div style={{
-            width: '100%', height: 'auto',
-            marginTop: '20px', marginBottom: '20px'
-        }}>
-            <div className="leetcode_tabs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                {/* 左侧部分 */}
-                <div
-                    style={{ display: 'flex', alignItems: 'center' }}
-                    className='leetcode-vscode-title'
-                >
-                    {fkPrefixLanguage}
-                </div>
+    return isLeeCodeTab 
+        ? (
+            <div style={{
+                width: '100%', height: 'auto',
+            }}>
+                <BrowserOnly>
+                    {() => {
+                        return (
+                            <div className='leetcode-tabs-content-on-vscode'>
+                                <MonacoEditor
+                                    language={fkLanguageEscape}
+                                    theme={isLoadedThemeDataed ? 'hx-one-dark-pro' : 'vs-dark'}
+                                    value={code}
+                                    onChange={handleChange}
+                                    editorWillMount={() => {
+                                        handleChange(children); // 更新高度
+                                    }}
+                                    options={{
+                                        minimap: { enabled: false },
+                                        automaticLayout: true,
+                                        language: fkLanguageEscape,
+                                        padding: { top: 10, bottom: 20 },
+                                        lineNumbersMinChars: 3,
+                                        scrollbar: {
+                                            vertical: 'hidden', // 隐藏垂直滚动条
+                                            alwaysConsumeMouseWheel: true, // 禁用鼠标滚轮滚动
+                                            handleMouseWheel: false, // 禁用编辑器内的鼠标滚轮事件
+                                        },
+                                        scrollBeyondLastLine: false, // 禁止滚动到最后一行之后
+                                        mouseWheelZoom: false, // 禁用鼠标滚轮缩放
+                                        renderFinalNewline: 'dimmed', // 是否显示最后一行的行号
+                                        cursorSurroundingLines: 0, // 初始化时禁用辅助行
+                                        cursorSurroundingLinesStyle: 'default',
+                                        overviewRulerLanes: 0,
+                                        fixedOverflowWidgets: true,
+                                        hideCursorInOverviewRuler: true,
+                                        overviewRulerBorder: false,
+                                        cursorBlinking: 'smooth',    // 光标样式
+                                        links: true, // 可以点击链接
+                                        codeLens: true,
+                                        lineHeight: 20, // 行间距
+                                    }}
+                                    width='auto'
+                                    height={editorHeight}
+                                    editorDidMount={handleEditorDidMount}
+                                />
+                            </div>
+                        )
+                    }}
+                </BrowserOnly>
+                <div className="leetcode_tabst-on-vscode" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                    {/* 左侧部分 */}
+                    <div
+                        style={{ display: 'flex', alignItems: 'center' }}
+                        className='leetcode-vscode-title'
+                    >
+                        {fkPrefixLanguage}
+                    </div>
 
-                {/* 右侧按钮部分 */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    <button
-                        onClick={handleReset}
-                        className="leetcode_tabs tabs__item"
-                    >
-                        {isSelected && (
-                            <FaCheck
-                                style={{
-                                    marginRight: '5px',
-                                    animation: 'checkmark 0.5s ease-in-out', // 动画效果
-                                }}
-                            />
-                        )}
-                        {!isSelected && (
-                            <FaUndo
-                                style={{
-                                    marginRight: '5px',
-                                    animation: 'checkmark 0.5s ease-in-out', // 动画效果
-                                }}
-                            />
-                        )}
-                        {'还原'}
-                    </button>
-                    <button
-                        onClick={copyToClipboard}
-                        className="leetcode_tabs tabs__item"
-                    >
-                        {isSelectedCopy && (
-                            <FaCheck
-                                style={{
-                                    marginRight: '5px',
-                                    animation: 'checkmark 0.5s ease-in-out', // 动画效果
-                                }}
-                            />
-                        )}
-                        {!isSelectedCopy && (
-                            <FaCopy
-                                style={{
-                                    marginRight: '5px',
-                                    animation: 'checkmark 0.5s ease-in-out', // 动画效果
-                                }}
-                            />
-                        )}
-                        {'复制'}
-                    </button>
+                    {/* 右侧按钮部分 */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                        <button
+                            onClick={handleReset}
+                            className="leetcode_tabst-on-vscode tabs__item"
+                        >
+                            {isSelected && (
+                                <FaCheck
+                                    style={{
+                                        marginRight: '5px',
+                                        animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                    }}
+                                />
+                            )}
+                            {!isSelected && (
+                                <FaUndo
+                                    style={{
+                                        marginRight: '5px',
+                                        animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                    }}
+                                />
+                            )}
+                            {'还原'}
+                        </button>
+                        <button
+                            onClick={copyToClipboard}
+                            className="leetcode_tabst-on-vscode tabs__item"
+                        >
+                            {isSelectedCopy && (
+                                <FaCheck
+                                    style={{
+                                        marginRight: '5px',
+                                        animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                    }}
+                                />
+                            )}
+                            {!isSelectedCopy && (
+                                <FaCopy
+                                    style={{
+                                        marginRight: '5px',
+                                        animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                    }}
+                                />
+                            )}
+                            {'复制'}
+                        </button>
+                    </div>
                 </div>
             </div>
-            <BrowserOnly>
-                {() => {
-                    return (
-                        <div className='leetcode-tabs-content'>
-                            <MonacoEditor
-                                language={fkLanguageEscape}
-                                theme={isLoadedThemeDataed ? 'hx-one-dark-pro' : 'vs-dark'}
-                                value={code}
-                                onChange={handleChange}
-                                editorWillMount={() => {
-                                    handleChange(children); // 更新高度
-                                }}
-                                options={{
-                                    minimap: { enabled: false },
-                                    automaticLayout: true,
-                                    language: fkLanguageEscape,
-                                    padding: { top: 10, bottom: 20 },
-                                    lineNumbersMinChars: 3,
-                                    scrollbar: {
-                                        vertical: 'hidden', // 隐藏垂直滚动条
-                                        alwaysConsumeMouseWheel: true, // 禁用鼠标滚轮滚动
-                                        handleMouseWheel: false, // 禁用编辑器内的鼠标滚轮事件
-                                    },
-                                    scrollBeyondLastLine: false, // 禁止滚动到最后一行之后
-                                    mouseWheelZoom: false, // 禁用鼠标滚轮缩放
-                                    renderFinalNewline: 'dimmed', // 是否显示最后一行的行号
-                                    cursorSurroundingLines: 0, // 初始化时禁用辅助行
-                                    cursorSurroundingLinesStyle: 'default',
-                                    overviewRulerLanes: 0,
-                                    fixedOverflowWidgets: true,
-                                    hideCursorInOverviewRuler: true,
-                                    overviewRulerBorder: false,
-                                    cursorBlinking: 'smooth',    // 光标样式
-                                    links: true, // 可以点击链接
-                                    codeLens: true,
-                                    lineHeight: 20, // 行间距
-                                }}
-                                width='auto'
-                                height={editorHeight}
-                                editorDidMount={handleEditorDidMount}
-                            />
-                        </div>
-                    )
-                }}
-            </BrowserOnly>
-        </div>
-    );
+        ) : (
+            <div style={{
+                width: '100%', height: 'auto',
+                marginTop: '20px', marginBottom: '20px'
+            }}>
+                <div className="leetcode_tabs" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                    {/* 左侧部分 */}
+                    <div
+                        style={{ display: 'flex', alignItems: 'center' }}
+                        className='leetcode-vscode-title'
+                    >
+                        {fkPrefixLanguage}
+                    </div>
+
+                    {/* 右侧按钮部分 */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                        <button
+                            onClick={handleReset}
+                            className="leetcode_tabs tabs__item"
+                        >
+                            {isSelected && (
+                                <FaCheck
+                                    style={{
+                                        marginRight: '5px',
+                                        animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                    }}
+                                />
+                            )}
+                            {!isSelected && (
+                                <FaUndo
+                                    style={{
+                                        marginRight: '5px',
+                                        animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                    }}
+                                />
+                            )}
+                            {'还原'}
+                        </button>
+                        <button
+                            onClick={copyToClipboard}
+                            className="leetcode_tabs tabs__item"
+                        >
+                            {isSelectedCopy && (
+                                <FaCheck
+                                    style={{
+                                        marginRight: '5px',
+                                        animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                    }}
+                                />
+                            )}
+                            {!isSelectedCopy && (
+                                <FaCopy
+                                    style={{
+                                        marginRight: '5px',
+                                        animation: 'checkmark 0.5s ease-in-out', // 动画效果
+                                    }}
+                                />
+                            )}
+                            {'复制'}
+                        </button>
+                    </div>
+                </div>
+                <BrowserOnly>
+                    {() => {
+                        return (
+                            <div className='leetcode-tabs-content'>
+                                <MonacoEditor
+                                    language={fkLanguageEscape}
+                                    theme={isLoadedThemeDataed ? 'hx-one-dark-pro' : 'vs-dark'}
+                                    value={code}
+                                    onChange={handleChange}
+                                    editorWillMount={() => {
+                                        handleChange(children); // 更新高度
+                                    }}
+                                    options={{
+                                        minimap: { enabled: false },
+                                        automaticLayout: true,
+                                        language: fkLanguageEscape,
+                                        padding: { top: 10, bottom: 20 },
+                                        lineNumbersMinChars: 3,
+                                        scrollbar: {
+                                            vertical: 'hidden', // 隐藏垂直滚动条
+                                            alwaysConsumeMouseWheel: true, // 禁用鼠标滚轮滚动
+                                            handleMouseWheel: false, // 禁用编辑器内的鼠标滚轮事件
+                                        },
+                                        scrollBeyondLastLine: false, // 禁止滚动到最后一行之后
+                                        mouseWheelZoom: false, // 禁用鼠标滚轮缩放
+                                        renderFinalNewline: 'dimmed', // 是否显示最后一行的行号
+                                        cursorSurroundingLines: 0, // 初始化时禁用辅助行
+                                        cursorSurroundingLinesStyle: 'default',
+                                        overviewRulerLanes: 0,
+                                        fixedOverflowWidgets: true,
+                                        hideCursorInOverviewRuler: true,
+                                        overviewRulerBorder: false,
+                                        cursorBlinking: 'smooth',    // 光标样式
+                                        links: true, // 可以点击链接
+                                        codeLens: true,
+                                        lineHeight: 20, // 行间距
+                                    }}
+                                    width='auto'
+                                    height={editorHeight}
+                                    editorDidMount={handleEditorDidMount}
+                                />
+                            </div>
+                        )
+                    }}
+                </BrowserOnly>
+            </div>
+        );
 }
 
 /**
@@ -593,7 +732,7 @@ function makeVsCodeCodeBlock ({
 function makeTabsCodeBlock ({
     children,
     className: blockClassName = '',
-    metastring,
+    metastring = '',
     title: titleProp,
     showLineNumbers: showLineNumbersProp,
     language: languageProp,
@@ -609,7 +748,7 @@ function makeTabsCodeBlock ({
             props: {
                 children,
                 className: blockClassName = '',
-                metastring: 'leetcode',
+                metastring: metastring,
                 title: titleProp,
                 showLineNumbers: showLineNumbersProp,
                 language: languageProp
@@ -634,6 +773,7 @@ function makeTabsCodeBlock ({
                         >
                             <MakeSimpleCodeBlock
                                 {...item.data.props} // 得这样传递, 多个参数真难搞
+                                isLeeCodeTab={true}
                                 fkPrefixLanguage={item.data.fkPrefixLanguage}
                             />
                         </TabItem>
@@ -645,9 +785,9 @@ function makeTabsCodeBlock ({
 }
 
 export default function CodeBlockString ({
-    children,
-    className: blockClassName = '',
-    metastring,
+    children,                               // 代码内容
+    className: blockClassName = '',         // 代码语言 ```C++ -> language-C++
+    metastring,                             // 代码语言空格之后的内容 ```C++ [xxxx] xxxx
     title: titleProp,
     showLineNumbers: showLineNumbersProp,
     language: languageProp,
@@ -664,25 +804,11 @@ export default function CodeBlockString ({
         return makeTabsCodeBlock({
             children,
             className: blockClassName = '',
-            metastring,
+            metastring: metastring?.replace(/\[(.+)-(.+)\]/, '') || '',
             title: titleProp,
             showLineNumbers: showLineNumbersProp,
             language: fkPrefixLanguage,
         }, fkPrefixLanguage, match[1], match[2]);
-    }
-
-    // 为我们自定义的结构 (VsCode 渲染)
-    if (metastring?.length === 6 && metastring.toUpperCase() === "VSCODE") {
-        return <BrowserOnly fallback={<div>加载中...</div>}>{
-            () => makeVsCodeCodeBlock({
-                children,
-                className: blockClassName = '',
-                metastring,
-                title: titleProp,
-                showLineNumbers: showLineNumbersProp,
-                language: languageProp,
-            }, fkPrefixLanguage)
-        }</BrowserOnly>;
     }
 
     // 默认代码块
@@ -693,6 +819,7 @@ export default function CodeBlockString ({
         title: titleProp,
         showLineNumbers: showLineNumbersProp,
         language: languageProp,
-        fkPrefixLanguage
+        fkPrefixLanguage,
+        isLeeCodeTab: false,
     });
 }
