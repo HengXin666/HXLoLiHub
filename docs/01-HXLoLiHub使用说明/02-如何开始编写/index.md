@@ -27,7 +27,7 @@
 ├── sidebars.ts                    # 文档的侧边栏 (应使用 generateSidebar.js 进行生成)
 ├── package.json
 ├── tsconfig.json
-└── push.bat                       # 一键生成侧边栏并且提交然后上传到远程仓库 (格式: .\push.bat "提交信息")
+└── push.ps1                       # 一键生成侧边栏并且提交然后上传到远程仓库 (格式: .\push "提交信息")
 ```
 
 ### 0.2 使用前须知
@@ -145,7 +145,7 @@ HXLoLiHub使用说明
 > 以上内容 **必需** 通过 `node .\scripts\generateSidebar.js` 解析后, 才可以被渲染.
 >
 > > [!TIP]
-> > 您可以在命令行中输入 `.\push.bat`, **不** 填写提交信息, 那么只会执行一次 `node .\scripts\generateSidebar.js` 和 `git add .` 命令. 以简化命令编写.
+> > 您可以在命令行中输入 `.\push`, **不** 填写提交信息, 那么只会执行一次 `node .\scripts\generateSidebar.js` 和 `git add .` 命令. 以简化命令编写.
 
 ## 二、博客
 
