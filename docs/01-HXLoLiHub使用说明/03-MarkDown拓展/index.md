@@ -63,6 +63,59 @@ System.out.println("Java");
 print("Python")
 ```
 
+```cpp [g1-One-Dark-Pro主题展示]
+class ServerAddInterceptorTestController {
+public:
+    struct Log {
+        decltype(std::chrono::steady_clock::now()) t;
+
+        bool before(HX::web::protocol::http::Request& req, HX::web::protocol::http::Response& res) {
+            HX::print::println("请求了: ", req.getPureRequesPath());
+            static_cast<void>(res);
+            t = std::chrono::steady_clock::now();
+            return true;
+        }
+
+        bool after(HX::web::protocol::http::Request& req, HX::web::protocol::http::Response& res) {
+            auto t1 = std::chrono::steady_clock::now();
+            auto dt = t1 - t;
+            int64_t us = std::chrono::duration_cast<std::chrono::milliseconds>(dt).count();
+            HX::print::println("已响应: ", req.getPureRequesPath(), "花费: ", us, " us");
+            static_cast<void>(res);
+            return true;
+        }
+    };
+
+    ROUTER
+        .on<GET, POST>("/", [](
+            Request& req,
+            Response& res
+        ) -> Task<> {
+            auto map = req.getParseQueryParameters();
+            if (map.find("loli") == map.end()) {
+                res.setResponseLine(Status::CODE_200)
+                .setContentType(HX::web::protocol::http::ResContentType::html)
+                .setBodyData("<h1>You is no good!</h1>");
+                co_return;
+            }
+            res.setResponseLine(Status::CODE_200)
+            .setContentType(HX::web::protocol::http::ResContentType::html)
+            .setBodyData("<h1>yo si yo si!</h1>");
+        }, Log{})
+        .on<GET, POST>("/home/{id}/**", [](
+            Request& req,
+            Response& res
+        ) -> Task<> {
+            static_cast<void>(req);
+            res.setResponseLine(Status::CODE_200)
+            .setContentType(HX::web::protocol::http::ResContentType::html)
+            .setBodyData("<h1>This is Home</h1>");
+            co_return;
+        })
+    ROUTER_END;
+};
+```
+
 语法:
 
 ````markdown
@@ -94,6 +147,8 @@ print("Python")
 > - 只要它们使用**相同的分组名**, 就会被解析到同一个代码块, **无论是在文章的何处**! *(只要是同一篇文章内)*
 >
 > - 标题名称 **不能** 相同! 否则是 UB (未定义行为)
+>
+> - 分组名称不能含有`-`, 例如 `[g-01-c++]` 你期望 `g-01` 是分组, 而实际上解析到的分组是 `g`. (因此尽量不要在分组代码块`[]`中使用`-`, 以免影响解析的正确性.)
 
 ## 三、可编辑的代码块 (内嵌VsCode同款编辑器)
 
