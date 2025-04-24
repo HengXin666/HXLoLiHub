@@ -224,7 +224,8 @@ export default function DocSidebarItemCategory ({
                                         borderRadius: '6px',
                                         color: '#ffffff',
                                         backgroundColor: '#990099',
-                                        boxShadow: '2px 2px 4px 1px rgba(255, 255, 255, 0.5)'
+                                        boxShadow: '2px 2px 4px 1px rgba(255, 255, 255, 0.5)',
+                                        whiteSpace: 'nowrap', // 防止文本拆分
                                     }}
                                 >{tag}</span>
                             ))}
