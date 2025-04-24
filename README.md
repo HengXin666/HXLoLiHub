@@ -89,9 +89,9 @@ npm docusaurus deploy
 | **文档关系图** | 生成 Docusaurus 文档之间的关系图 | [docusaurus-graph](https://github.com/Arsero/docusaurus-graph) |
 | **评论功能** | 基于 Giscus 添加评论功能 | [@giscus/react](https://github.com/giscus/giscus-component) |
 | **文件夹和 markdown 图标** | 使用 vscode-icons 提供的文件夹和 markdown 图标 <br /> (仅使用了`文件夹`和`markdown`图标) | [vscode-icons](https://github.com/vscode-icons/vscode-icons) |
-| **tailwindcss** | 只需书写 HTML 代码, 无需书写 CSS 的 <br /> 一个实用程序优先的 CSS 框架, 用于快速构建自定义用户界面 | [tailwindlabs (3.4)](https://github.com/tailwindlabs/tailwindcss) |
+| **tailwindcss** | 只需书写 HTML 代码, 无需书写 CSS 的 <br /> 一个实用程序优先的 CSS 框架 <br /> 用于快速构建自定义用户界面 | [tailwindlabs (3.4)](https://github.com/tailwindlabs/tailwindcss) |
 
-> 以上内容, 排名不分先后. 还有很多依赖, 没有列出来, 感谢所有的开源项目及项目维护者!
+> 以上内容, 排名不分先后. 还有很多依赖, 没有列出来, **感谢所有的开源项目及项目维护者**!
 
 ### 4.2 环境依赖
 
