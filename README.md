@@ -89,6 +89,7 @@ npm docusaurus deploy
 | **文档关系图** | 生成 Docusaurus 文档之间的关系图 | [docusaurus-graph](https://github.com/Arsero/docusaurus-graph) |
 | **评论功能** | 基于 Giscus 添加评论功能 | [@giscus/react](https://github.com/giscus/giscus-component) |
 | **文件夹和 markdown 图标** | 使用 vscode-icons 提供的文件夹和 markdown 图标 <br /> (仅使用了`文件夹`和`markdown`图标) | [vscode-icons](https://github.com/vscode-icons/vscode-icons) |
+| **tailwindcss** | 只需书写 HTML 代码, 无需书写 CSS 的 <br /> 一个实用程序优先的 CSS 框架, 用于快速构建自定义用户界面 | [tailwindlabs (3.4)](https://github.com/tailwindlabs/tailwindcss) |
 
 > 以上内容, 排名不分先后. 还有很多依赖, 没有列出来, 感谢所有的开源项目及项目维护者!
 
@@ -115,6 +116,8 @@ npm docusaurus deploy
 - [添加Remark Github Alert插件](https://jdocs.wiki/docusaurus-site/plugins/plugins-remarkjs-github-alerts)
 
 - [部分主题魔改的样式、代码参考: kuizuo/blog](https://github.com/kuizuo/blog)
+
+- [超链接小组件](https://dino.castamerego.com/blog/Link) 与 [Docusaurus += Tailwindcss](https://dino.castamerego.com/docs/Server/Docusaurus-Theme)
 
 - Chat-GPT 贡献了项目 80% 的 Bug, 大部分内容只能查文档或者在Github上学习别人写的源码应用.
 

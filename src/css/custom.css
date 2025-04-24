@@ -2,6 +2,14 @@
 @import "remark-github-alerts/styles/github-base.css";
 @import "remark-github-alerts/styles/github-colors-light.css";
 
+/* https://dino.castamerego.com/docs/Server/Docusaurus-Theme */
+.tailwind {
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+  @tailwind screens;
+}
+
 /* === 全局主题色 === */
 :root {
   --ifm-color-primary: #ff88ff;
