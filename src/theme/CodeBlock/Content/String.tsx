@@ -176,7 +176,7 @@ function MakeSimpleCodeBlock (
         isLeeCodeTab = false,
     } = props;
 
-    if (matchRegex("(vscode)", metastring)) {
+    if (matchRegex("([vV][sS][cC][oO][dD][eE])", metastring)) {
         return (
             <BrowserOnly fallback={<div>加载中...</div>}>
                 {() => makeVsCodeCodeBlock({
