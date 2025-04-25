@@ -123,7 +123,7 @@ npm docusaurus deploy
 
 ## 五、联系我们
 
-如果您有任何问题或建议, 欢迎通过 [Issues](./issues) 反馈.
+如果您有任何问题或建议, 欢迎通过 [Issues](https://github.com/HengXin666/HXLoLiHub/issues) 反馈.
 
 ## 六、许可证
 

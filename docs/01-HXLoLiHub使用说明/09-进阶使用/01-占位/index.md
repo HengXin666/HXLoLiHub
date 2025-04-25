@@ -1,9 +1,3 @@
----
-# 显示 h2 到 h5 标题
-toc_min_heading_level: 2
-toc_max_heading_level: 6
----
-
 # 测试使用
 @todo HengXin666
 

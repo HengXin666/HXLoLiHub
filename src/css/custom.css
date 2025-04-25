@@ -115,7 +115,7 @@ li:has(> .table-of-contents__link--active) {
 }
 
 /* 覆盖默认竖线颜色的伪元素 */
-li:has(> .table-of-contents__link--active)::before {
+li:has(> .table-of-contents__link--active)::before { /* h2 */
   content: '';
   position: absolute;
   left: -19px; /* 与 padding-left -19 与 padding-left + 9 的 距离相等 (总之我看得是对齐的) */
@@ -126,18 +126,18 @@ li:has(> .table-of-contents__link--active)::before {
 }
 
 /* 处理嵌套层级的缩进（根据实际结构调整） */
-ul ul li:has(> .table-of-contents__link--active)::before {
+ul ul li:has(> .table-of-contents__link--active)::before { /* h3 */
   left: -35px; /* 第二层: 16 * 2 + li:left */
 }
 
-ul ul ul li:has(> .table-of-contents__link--active)::before {
+ul ul ul li:has(> .table-of-contents__link--active)::before { /* h4 */
   left: -51px; /* 第三层: 16 * 3 + li:left */
 }
 
-ul ul ul ul li:has(> .table-of-contents__link--active)::before {
+ul ul ul ul li:has(> .table-of-contents__link--active)::before { /* h5 */
   left: -67px; /* 第四层: 16 * 4 + li:left */
 }
 
-ul ul ul ul ul li:has(> .table-of-contents__link--active)::before {
+ul ul ul ul ul li:has(> .table-of-contents__link--active)::before { /* h6 */
   left: -83px; /* 第五层: 16 * 5 + li:left */
 }

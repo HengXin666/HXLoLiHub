@@ -110,6 +110,8 @@ const config: Config = {
     },
     // 项目的社交卡片图像
     image: "img/logo.png",
+
+    // 导航栏配置
     navbar: {
       hideOnScroll: true, // 自动隐藏导航栏
       title: "HXLoLiHub", // 导航栏标题
@@ -146,6 +148,8 @@ const config: Config = {
         },
       ],
     },
+
+    // 页脚配置
     footer: {
       style: "dark", // 页脚风格
       links: [
@@ -177,6 +181,8 @@ const config: Config = {
       // 页脚版权信息
       copyright: `版权所有 © 2025 - ${new Date().getFullYear()} HXLoLiHub, Inc. 由 Docusaurus 构建.`,
     },
+
+    // 代码块配置
     prism: {
       theme: prismThemes.oneDark,
       // 它必须在 node_modules/prismjs/components 中
@@ -195,6 +201,12 @@ const config: Config = {
         // 其他
         'sql', 'powershell', 'bash', 'markdown',
       ],
+    },
+
+    // TOC标题配置, 支持渲染 h2 ~ h6 的标题 (默认是 h2 ~ h4)
+    tableOfContents: {
+      minHeadingLevel: 2,
+      maxHeadingLevel: 6,
     },
   } satisfies Preset.ThemeConfig,
 

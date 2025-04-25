@@ -25,8 +25,13 @@ const ProgressBar = () => {
 
     return (
         <div className="tailwind">
-            <div className="border-l border-gray-600 text-fuchsia-400">
-                <div className="ml-4 -mb-2" style={{borderBottom: '1.5px solid rgb(61, 68, 77)'}}>{progress}%</div>
+            <div className="text-fuchsia-400" style={{borderLeft: '1px solid var(--ifm-toc-border-color)'}}>
+                <div 
+                    className="ml-4 -mb-2" 
+                    style={{borderBottom: '1.5px solid var(--ifm-toc-border-color)'}}
+                >
+                    {progress}%
+                </div>
             </div>
         </div>
     );
