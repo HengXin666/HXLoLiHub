@@ -1,6 +1,4 @@
-# 识别辅助
 *.ts linguist-language=TypeScript
 *.tsx linguist-language=TypeScript
 
-# 忽略
 static/katex/ linguist-vendored

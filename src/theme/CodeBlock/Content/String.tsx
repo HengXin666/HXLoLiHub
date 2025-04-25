@@ -1,5 +1,5 @@
 import React, { type ReactNode } from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 import clsx from 'clsx';
 import { useThemeConfig, usePrismTheme } from '@docusaurus/theme-common';

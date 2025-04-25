@@ -10,11 +10,20 @@ interface Props {
     onSameUrl?: "open" | "refresh" | "disable";
 }
 
+/**
+ * @todo Heng_Xin 2025-4-25 00:55:03
+ * @Bug 不知道为什么, 部署在 github page 时候, 链接颜色默认就是 color = 0
+ * 必需要刷新页面或者切换页面才可以正常显示为 color = 1
+ * 而本地无法测试出来, 因此我直接让 color = 0 = 1 了; 有需求的, 请自行修复...
+ * 
+ * 并且仅影响 main 和 hover 字段, 不影响 underScore 字段...
+ */
+
 const colors = [
     {   // 明亮主题的样式
-        main: "text-blue-500",
-        hover: "hover:text-blue-700",
-        underScore: "bg-blue-400",
+        main: "text-fuchsia-400",
+        hover: "hover:text-pink-700",
+        underScore: "bg-purple-700",
     },
     {   // 暗黑主题的样式
         main: "text-fuchsia-400",

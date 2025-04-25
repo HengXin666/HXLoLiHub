@@ -100,3 +100,44 @@
 .markdown h3 {
   font-size: 1.25rem; /* GitHub 的 h3 大小 */
 }
+
+/* === TOC栏(页面目录) 样式 === */
+
+/* 原左侧竖线样式 (根据实际情况调整) */
+.table-of-contents__left-border {
+  border-left: 1px solid var(--ifm-toc-border-color); /* 默认颜色 */
+  padding-left: 10px; /* 确保与伪元素的 left 值匹配 */
+}
+
+/* 高亮激活状态的竖线 */
+li:has(> .table-of-contents__link--active) {
+  position: relative;
+}
+
+/* 覆盖默认竖线颜色的伪元素 */
+li:has(> .table-of-contents__link--active)::before {
+  content: '';
+  position: absolute;
+  left: -19px; /* 与 padding-left -19 与 padding-left + 9 的 距离相等 (总之我看得是对齐的) */
+  top: 0;
+  bottom: 0;
+  border-left: 1.2px solid var(--ifm-color-primary); /* 高亮颜色 */
+  z-index: 1; /* 确保覆盖原边框 */
+}
+
+/* 处理嵌套层级的缩进（根据实际结构调整） */
+ul ul li:has(> .table-of-contents__link--active)::before {
+  left: -35px; /* 第二层: 16 * 2 + li:left */
+}
+
+ul ul ul li:has(> .table-of-contents__link--active)::before {
+  left: -51px; /* 第三层: 16 * 3 + li:left */
+}
+
+ul ul ul ul li:has(> .table-of-contents__link--active)::before {
+  left: -67px; /* 第四层: 16 * 4 + li:left */
+}
+
+ul ul ul ul ul li:has(> .table-of-contents__link--active)::before {
+  left: -83px; /* 第五层: 16 * 5 + li:left */
+}
