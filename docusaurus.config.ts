@@ -139,6 +139,10 @@ const config: Config = {
               to: "/blog/archive",
               label: "归档",
             },
+            {
+              to: "https://hengxin666.github.io/HXLoLi/",
+              label: "个人博客",
+            }
           ]
         },
         {
@@ -174,6 +178,10 @@ const config: Config = {
                   <img src="${BaseUrl}/default-img/buildwith.png" alt="build with docusaurus" width="120" height="50"/>
                 </a>
                 `,
+            },
+            {
+              label: "个人博客",
+              href: "https://hengxin666.github.io/HXLoLi/"
             },
           ],
         },

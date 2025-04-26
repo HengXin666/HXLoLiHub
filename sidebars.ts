@@ -63,6 +63,20 @@ module.exports = {
         },
         {
           "type": "category",
+          "label": "配置评论服务",
+          "collapsible": true,
+          "items": [],
+          "customProps": {
+            "icon": "/HXLoLiHub/default-icons/file_type_markdown.svg",
+            "tags": []
+          },
+          "link": {
+            "type": "doc",
+            "id": "HXLoLiHub使用说明/配置评论服务/index"
+          }
+        },
+        {
+          "type": "category",
           "label": "进阶使用",
           "collapsible": true,
           "items": [
