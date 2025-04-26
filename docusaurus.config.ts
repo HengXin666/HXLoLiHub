@@ -60,7 +60,15 @@ const config: Config = {
           include: ["**/*.{md,mdx}"],
           sidebarPath: "./sidebars.ts", // 引入自定义的侧边栏配置文件
           remarkPlugins: [remarkGithubAlerts, remarkMath],
-          rehypePlugins: [rehypeKatex],
+          rehypePlugins: [
+            [
+              rehypeKatex,
+              {
+                strict: false, // 设置为 false 禁用严格模式
+                errorColor: "#cc0000", // 可以自定义错误颜色
+              },
+            ],
+          ],
           editUrl: "https://github.com/HengXin666/HXLoLiHub/edit/main/", // 文档编辑链接, 指向 GitHub 项目
           showLastUpdateTime: true,   // 显示最后编辑时间
           showLastUpdateAuthor: true, // 显示更新作者
@@ -69,7 +77,15 @@ const config: Config = {
           blogSidebarTitle: '所有文章', // 侧边栏标题
           blogSidebarCount: 'ALL',     // 显示所有的文章
           remarkPlugins: [remarkGithubAlerts, remarkMath],
-          rehypePlugins: [rehypeKatex],
+          rehypePlugins: [
+            [
+              rehypeKatex,
+              {
+                strict: false, // 设置为 false 禁用严格模式
+                errorColor: "#cc0000", // 可以自定义错误颜色
+              },
+            ],
+          ],
           feedOptions: {
             type: ["rss", "atom"], // 支持的博客订阅格式
             xslt: true,
