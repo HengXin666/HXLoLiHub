@@ -290,3 +290,212 @@ if __name__ == '__main__':
 谁知道, 一导出直接炸了... `/`被强制创建文件夹、`空格.:`直接被替换为 `''` (空), 导致很多东西都解析不了...
 
 以后命名需要注意一下. (不过影响的内容不多, 只有少数几篇有问题.. (但是`.空格`这种, 因为力扣题目的标题包含这些, 我就只好py先预处理替换了qwq))
+
+## 实操
+
+一迁移一堆报错...
+
+发现是 对于一些时候的`-`, `_`是不对的. 以及`[]`与`()`在文件名是有问题的...
+
+```python vscode
+import os
+import re
+import shutil
+
+def fxxkPath(path: str) -> str:
+    # 定义非法字符的正则模式 (Windows下的特殊字符)
+    illegalChars = r'[<>:"/\-_\\|?*]'
+    
+    # 用正则替换非法字符为合法字符
+    res = re.sub(illegalChars, '丶', path)
+    res = re.sub(r'[\[\(]', '【', res);
+    res = re.sub(r'[\]\)]', '】', res);
+    res = re.sub(r'[0-9]', '', res);
+    # 返回合法的路径
+    return res
+
+# 特殊路径缓存
+memoPathItem = {}
+
+# 字典树, 边构建, 边输出
+class Node:
+    def __init__(self):
+        self.next = {}  # 存储下一级节点
+        self.idPath = {}  # 存储路径标识
+
+    def _add(self, s: str, maePath: str):
+        """模拟树结构的添加"""
+        fkStr = fxxkPath(s)
+
+        if (fkStr != s):
+            memoPathItem[s] = fkStr
+            s = fkStr
+
+        if s in self.next:
+            return self.next[s], self.idPath[s]
+        
+        node = Node()
+        self.next[s] = node
+        idPath = f"{len(self.next):03d}-{s}"
+        self.idPath[s] = idPath
+        
+        os.makedirs(os.path.dirname(f"{maePath}/{idPath}/"), exist_ok=True)
+        
+        return node, idPath
+
+
+def insert(root: Node, path: str, coutPath: str):
+    """path insert to Tree"""
+    list = path.split('/')
+    node = root
+
+    for s in list:
+        if (len(s) == 0):
+            continue
+        node, newPath = node._add(s, coutPath)
+        coutPath = f"{coutPath}/{newPath}"
+
+    return coutPath
+
+def parse_log(srcRoot, logPath, coutPath):
+    """改进后的日志解析函数"""
+    
+    root = Node()
+
+    # id-mpa: id - (NewPath(新路径), 原路径)
+    idMap = {}
+    
+    with open(logPath, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            # 跳过非数据行
+            if not line.startswith('┃') or line.startswith('┠') or '排序 [ID]' in line:
+                continue
+            
+            # 使用更精确的正则表达式
+            match = re.match(
+                r'^┃\s+(\d+)\s+\[(\d+)\]\s+\[\s*(\d+)\s*\]\s+\[([^\]]+)\]\s+(.+)$',
+                line
+            )
+            if not match:
+                continue
+            
+            _, aid, _, _, path = match.groups()
+
+            # 把 path 的空格和. 替换为 '' (空)
+            path = path.replace(' ', '').replace('.', '').replace(':', '')
+
+            path = path.strip()
+
+            # 此处必然创建 index.md
+            makeFile = f"{insert(root, path, coutPath)}/index.md"
+            srcFile = f"{srcRoot}/{path}.md"
+
+            print("build", makeFile)
+            
+            if os.path.exists(srcFile):
+                shutil.copy2(srcFile, makeFile)
+            else:
+                print(f"Warning: Source file {srcFile} does not exist.")
+            
+            idMap[aid] = (makeFile, f"{srcRoot}/{os.path.dirname(path)}")
+
+    return idMap
+
+
+def syoriFile(idMap):
+    """处理文件, 把图片进行复制, 把链接替换为相对路径"""
+
+    # 处理图片 (需要copy过来)
+    def process_image(match, current_dir, oldPath):
+        alt = match.group(1)
+        img_path = match.group(2)
+        
+        # @todo 特别的, 如果是本地路径, 但文件不存在, 则会报错或者终止!
+        if not img_path.startswith('http'):
+            img_name = os.path.basename(img_path)
+            dest = os.path.join(oldPath, img_path)
+            if os.path.exists(dest):
+                shutil.copy(dest, f"{current_dir}/{img_name}")
+                print("cp img:", img_name)
+            else:
+                print("图片不存在:", dest, "来自", current_dir, "index.md")
+                exit(-1)
+            return f'![{alt}](./{img_name})'
+        return match.group(0)
+
+    # 处理图片链接
+    def replace_link(match, id_map, current_dir):
+        text = match.group(1)
+        aid = match.group(2)
+        
+        if aid in id_map:
+            target = id_map[aid][0]
+            rel_path = os.path.relpath(target, start=current_dir).replace(os.sep, '/')
+            return f'[{text}]({rel_path})'
+        return match.group(0)
+
+    for id, path in idMap.items():  # 使用 .items() 遍历字典
+        print(id, path)
+
+        paPath = os.path.dirname(path[0])  # 获取当前文件的父目录
+
+        with open(path[0], 'r+', encoding='utf-8') as f:
+            content = f.read()
+            
+            # 处理图片
+            content = re.sub(
+                r'!\[(.*?)\]\(((?!http).*?)\)',
+                lambda m: process_image(m, paPath, path[1]), 
+                content
+            )
+            
+            # 处理文章链接
+            content = re.sub(
+                r'\[(.*?)\]\(https://blog\.hxloli\.com/blog/.*?articleId=(\d+).*?\)',
+                lambda m: replace_link(m, idMap, paPath),
+                content
+            )
+            
+            f.seek(0)
+            f.write(content)
+            f.truncate()
+
+                
+def main(logPath, srcRoot, outputDir):
+    # 标准化路径
+    srcRoot = os.path.normpath(srcRoot)
+    outputDir = os.path.normpath(outputDir)
+    
+    # 解析日志, 并且复制到新路径, 并且 记录 id - (新路径, 原路径), 然后返回 idMap
+    idMap = parse_log(srcRoot, logPath, outputDir)
+    
+    # 创建输出目录结构并复制文件
+    syoriFile(idMap)
+
+if __name__ == '__main__':
+    main(
+        logPath='./cin/BML_1_20250425_143534_243/log.txt',
+        srcRoot='./cin/BML_1_20250425_143534_243',
+        outputDir='./cout'
+    )
+```
+
+一波操作, 就改为上面终于是可以`run`了...
+
+但是, 还是有问题...
+
+原来v3默认是把所有文件都当做`mdx`解析了...
+
+导致我的html只要是用样式的, 就全报错...
+
+折磨好久... 查阅文档, 发现是可以设置的:
+
+```ts
+markdown: {
+    mermaid: false,
+    format: 'detect', // 自动根据文件扩展名选择格式 (而不是默认的mdx!)
+},
+```
+
+赶紧给你改了, 谁用mdx啊? あのさ, 僕、markdownを書く権利が有る! ~~(一个疯疯癫癫的白毛的声音)~~

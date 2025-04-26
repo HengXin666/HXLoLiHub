@@ -221,6 +221,7 @@ const config: Config = {
   // 支持渲染 Mermaid 图表, 但是我们自己渲染! 以支持兼容组合代码块
   markdown: {
     mermaid: false,
+    format: 'detect', // 自动根据文件扩展名选择格式 (而不是默认的mdx!)
   },
   themes: ['@docusaurus/theme-mermaid'],
 };
