@@ -64,7 +64,7 @@ npm run start
 项目已经配置了 `Github 工作流` 您只需要推送则会自动进行部署到 `Github Page`.
 
 > [!TIP]
-> 当然, 在此之前还需要一些配置 (待更新)
+> 当然, 在此之前还需要一些配置, 详细教程请看 [开始使用(部署指南)](https://hengxin666.github.io/HXLoLiHub/docs/HXLoLiHub使用说明/开始使用-部署指南/).
 
 或者在本地手动运行:
 

@@ -11,7 +11,7 @@ const BaseUrl = "/HXLoLiHub";
 // 站点配置
 const config: Config = {
   title: "HXLoLiHub", // 项目名称
-  tagline: "ここから先は一方通行だ!", // 项目的 tagline（副标题）
+  tagline: "ここから先は一方通行だ!", // 项目的 tagline (副标题)
   favicon: "img/favicon.ico", // 项目图标, 可以根据实际情况更换
 
   // 站点的URL, GitHub Pages 一般需要设置为项目的路径
